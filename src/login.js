@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { auth } from './firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,32 @@ function Login() {
   const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
+
+  const videoRef = useRef(null);
+  const [imageData, setImageData] = useState(null);
+
+  const startWebcam = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      videoRef.current.srcObject = stream;
+    } catch (error) {
+      console.error('Error accessing webcam:', error);
+    }
+  };
+
+  useEffect(() => {
+    startWebcam();
+  }, []);
+
+  const takePicture = () => {
+    const canvas = document.createElement('canvas');
+    const video = videoRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL('image/jpeg');
+    setImageData(dataURL);
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -38,6 +64,10 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+       
+        <div className="webcam-container">
+          <video ref={videoRef} autoPlay />
+        </div>
         <button type="submit">Login</button>
         <div className="additional-options">
           <button

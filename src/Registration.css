@@ -43,3 +43,18 @@
     background-color: #0056b3;
   }
   
+  .registration-form video {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .image-preview {
+    margin: 20px 0;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }

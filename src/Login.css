@@ -52,3 +52,8 @@
     margin-right: 10px;
   }
   
+  video {
+    max-width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
