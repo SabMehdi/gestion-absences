@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './navbar';
 import { auth } from './firebase';
 import Home from './home';
+import ForgotPassword from './resetPassword';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -27,6 +28,7 @@ function App() {
         <Route path='/' Component={Home} />
         <Route path='/login' Component={Login} />
         <Route path='/register' Component={Registration} />
+        <Route path='/reset' Component={ForgotPassword}/>
       </Routes>
     </BrowserRouter>
   );

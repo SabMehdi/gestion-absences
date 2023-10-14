@@ -45,7 +45,7 @@ function Navbar({ user }) {
                 <li onClick={handleSignOut} > <Link to={"/"}  style={{color:'white'}}>sign off</Link></li>
               </ul>
               <ul>
-                <li> <Link to={"/modifyPass"}  style={{color:'white'}}>change password</Link></li>
+                <li> <Link to={"/reset"}  style={{color:'white'}}>change password</Link></li>
               </ul>
             </div>
           )}

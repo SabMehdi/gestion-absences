@@ -81,7 +81,7 @@ function Login() {
           <button
             type="button"
             onClick={() => {
-              navigate('/forgot-password');
+              navigate('/reset');
             }}
           >
             Forgot Password
