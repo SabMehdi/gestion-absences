@@ -3,13 +3,30 @@ import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './login';
 import Registration from './register';
-
+import React, { useState, useEffect } from 'react';
+import Navbar from './navbar';
+import { auth } from './firebase';
+import Home from './home';
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <BrowserRouter>
+      <Navbar user={user} />
       <Routes>
-        <Route path='/login' Component={Login}/>
-        <Route path='/register' Component={Registration}/>
+        <Route path='/' Component={Home} />
+        <Route path='/login' Component={Login} />
+        <Route path='/register' Component={Registration} />
       </Routes>
     </BrowserRouter>
   );
