@@ -51,7 +51,7 @@ function Navbar({ user }) {
           )}
         </div>
           ) : (
-            <Link to="/login" className="login-button btn btn-secondary">
+            <Link to="/login" className='login-btn'>
               Log In
             </Link>
           )}

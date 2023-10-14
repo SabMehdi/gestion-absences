@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
 import { auth } from './firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import './Registration.css'; // Import your CSS stylesheet
+
 function Registration() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleRegistration = async (e) => {
     e.preventDefault();
 
     try {
-      await createUserWithEmailAndPassword(auth,email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       alert('Registration Successful!');
+      navigate('/');
     } catch (error) {
       alert(error.message);
     }
   };
 
   return (
-    <div>
-      <h2>Registration</h2>
-      <form onSubmit={handleRegistration}>
+    <div className="registration-container">
+      <form className="registration-form" onSubmit={handleRegistration}>
+        <h2>Registration</h2>
         <input
           type="email"
           placeholder="Email"
