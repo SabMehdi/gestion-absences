@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getDatabase, ref as dbRef, set } from 'firebase/database';
 import { getStorage } from 'firebase/storage';
 
+
 function Registration() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,28 +44,31 @@ function Registration() {
   };
 
   const handleRegistration = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    // Your registration logic here, including using `imageData` for the user's profile image.
+    e.preventDefault();
+
     try {
+      // Register the user using Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+      // Get the user's UID
+      const userUid = userCredential.user.uid;
+
       // Upload the image to Firebase Storage
       if (imageData) {
         const imageBlob = await fetch(imageData).then((r) => r.blob());
         const imageFile = new File([imageBlob], 'profile.jpg', { type: 'image/jpeg' });
 
-        const storageRef = ref(storage, 'profile_images/' + auth.currentUser.uid + '.jpg');
+        const storageRef = ref(storage, 'profile_images/' + userUid + '.jpg');
         const snapshot = await uploadBytes(storageRef, imageFile);
         const downloadURL = await getDownloadURL(snapshot.ref);
 
         // Store the user's data, including the download URL, in the Realtime Database
         const database = getDatabase();
-        const userRef = dbRef(database, 'users/' + auth.currentUser.uid);
+        const userRef = dbRef(database, 'users/' + userUid);
         await set(userRef, {
           email: email,
           profileImage: downloadURL,
         });
-
-        // Continue with user registration
-        await createUserWithEmailAndPassword(auth, email, password);
 
         // Redirect to the home page or other actions
         alert('Registration Successful!');
@@ -77,7 +81,7 @@ function Registration() {
 
   return (
     <div className="registration-container">
-      <form className="registration-form">
+      <form className="registration-form" onSubmit={handleRegistration}>
         <h2>Registration</h2>
         <input
           type="email"
@@ -94,19 +98,17 @@ function Registration() {
         <div className="webcam-container">
           <video ref={videoRef} autoPlay />
           <button type="button" onClick={takePicture}>Take Picture</button>
-
         </div>
         {imageData && (
           <div className="image-preview">
             <img src={imageData} alt="User" />
           </div>
         )}
-        <button type="button" onClick={handleRegistration}>
-          Register
-        </button>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
 }
+
 
 export default Registration;
