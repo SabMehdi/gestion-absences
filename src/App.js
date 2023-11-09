@@ -8,6 +8,7 @@ import Navbar from './navbar';
 import { auth } from './firebase';
 import Home from './home';
 import ForgotPassword from './resetPassword';
+import Attendence from './Attendence';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -29,6 +30,8 @@ function App() {
         <Route path='/login' Component={Login} />
         <Route path='/register' Component={Registration} />
         <Route path='/reset' Component={ForgotPassword}/>
+        <Route path='/attendence' Component={Attendence}/>
+        
       </Routes>
     </BrowserRouter>
   );

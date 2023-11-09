@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 
-function MoodAnalysis() {
+function Attendence() {
   const [imageData, setImageData] = useState(null);
   const [expressions, setExpressions] = useState(null);
   const videoRef = useRef(null);
@@ -69,4 +69,4 @@ function MoodAnalysis() {
   );
 }
 
-export default MoodAnalysis;
+export default Attendence;
