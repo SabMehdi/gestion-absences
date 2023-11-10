@@ -16,10 +16,13 @@ function Login() {
   const videoRef = useRef(null);
   const [imageData, setImageData] = useState(null);
 
-  async function getFaceDescriptorFromDatabase(userUid) {
-    const database = getDatabase();
-    const userRef = dbRef(database, 'users/' + userUid);
+  async function getFaceDescriptorFromDatabase(email, password) {
+
     try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      const userUid = userCredential.user.uid
+      const database = getDatabase();
+      const userRef = dbRef(database, 'users/' + userUid);
       const snapshot = await get(userRef);
       if (snapshot.exists()) {
         const userData = snapshot.val();
@@ -64,19 +67,13 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // Check if the image has been taken
+    if (!imageData) {
+      alert('Please take a picture before logging in.');
+      return; // Stop the function if no picture has been taken
+    }
+
     try {
-      // Authenticate with Firebase using email and password
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const userUid = userCredential.user.uid;
-
-      // Capture the image from the webcam
-      
-
-      // Wait for the image data to be set
-      if (!imageData) {
-        throw new Error('Please take a picture first.');
-      }
-
       // Create an image element from the imageData
       const img = new Image();
       img.src = imageData;
@@ -86,25 +83,30 @@ function Login() {
 
       // Perform face detection on the image
       const detections = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
-      if (detections) {
-        // Fetch the user's face descriptor from Firebase
-        const userFaceDescriptor = await getFaceDescriptorFromDatabase(userUid);
-
-        // Compare the descriptors
-        const distance = faceapi.euclideanDistance(detections.descriptor, userFaceDescriptor);
-        if (distance < 0.6) { // Threshold value, might need tuning
-          alert('Face recognized. Login Successful!');
-          navigate('/');
-        } else {
-          alert('Face not recognized. Please try again or use your password to log in.');
-        }
-      } else {
+      if (!detections) {
         throw new Error('No face detected, please try again.');
       }
+
+      // Fetch the user's face descriptor from Firebase
+      const userFaceDescriptor = await getFaceDescriptorFromDatabase(email, password);
+
+      // Compare the descriptors
+      const distance = faceapi.euclideanDistance(detections.descriptor, userFaceDescriptor);
+      if (distance >= 0.6) { // Adjust threshold as needed
+        throw new Error('Face not recognized. Please try again or use your password to log in.');
+      }
+
+      // Authenticate with Firebase using email and password
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      alert('Face recognized. Login Successful!');
+      navigate('/'); // Navigate to the main page
+
     } catch (error) {
       alert('Login failed: ' + error.message);
     }
   };
+
+
 
 
   return (

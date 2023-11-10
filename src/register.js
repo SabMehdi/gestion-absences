@@ -105,7 +105,8 @@ function Registration() {
           birthdate: birthdate,
           email: email,
           profileImage: downloadURL,
-          faceDescriptor: detections.descriptor // This is an array of numbers representing the face
+          faceDescriptor: detections.descriptor, 
+          isAdmin:false// This is an array of numbers representing the face
         });
         console.log("Face descriptor saved for user:", userUid);
   
