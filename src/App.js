@@ -29,9 +29,9 @@ function App() {
         <Route path='/' Component={Home} />
         <Route path='/login' Component={Login} />
         <Route path='/register' Component={Registration} />
-        <Route path='/reset' Component={ForgotPassword}/>
-        <Route path='/attendence' Component={Attendence}/>
-        
+        <Route path='/reset' Component={ForgotPassword} />
+        <Route path='/attendence' Component={Attendence} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -51,7 +51,6 @@ function Attendence() {
       const snapshot = await get(usersRef);
       if (snapshot.exists()) {
         const usersData = snapshot.val();
-        // Transform the usersData object into an array of descriptors
         return Object.entries(usersData).map(([uid, user]) => ({
           uid,
           descriptor: user.faceDescriptor,
@@ -61,7 +60,7 @@ function Attendence() {
       }
     } catch (error) {
       console.error('Failed to fetch user data:', error.message);
-      throw error; // Re-throw the error to be handled by the caller
+      throw error;
     }
   }
 
@@ -78,14 +77,12 @@ function Attendence() {
       let image = new Image();
       image.src = dataURL;
 
-      // Wait for the image to load before attempting face detection
       await new Promise((resolve) => {
         image.onload = resolve;
       });
-      // Now detect the mood
       const detections = await faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
-        .withFaceDescriptor()// This line is added to get the descriptor
+        .withFaceDescriptor()
         .withFaceExpressions()
       if (detections) {
         console.log(detections)
@@ -103,12 +100,10 @@ function Attendence() {
           }
         });
 
-        if (bestMatch.distance < 0.6) { // Threshold value, might need tuning
+        if (bestMatch.distance < 0.6) {
           console.log(`Match found! User ID: ${bestMatch.uid}`);
-          // Perform action for successful match
         } else {
           console.log('No match found.');
-          // Perform action for no match
         }
       }
     } catch (error) {

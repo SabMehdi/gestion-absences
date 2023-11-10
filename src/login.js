@@ -67,39 +67,33 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Check if the image has been taken
     if (!imageData) {
       alert('Please take a picture before logging in.');
-      return; // Stop the function if no picture has been taken
+      return;
     }
 
     try {
-      // Create an image element from the imageData
       const img = new Image();
       img.src = imageData;
       await new Promise((resolve) => {
         img.onload = resolve;
       });
 
-      // Perform face detection on the image
       const detections = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
       if (!detections) {
         throw new Error('No face detected, please try again.');
       }
 
-      // Fetch the user's face descriptor from Firebase
       const userFaceDescriptor = await getFaceDescriptorFromDatabase(email, password);
 
-      // Compare the descriptors
       const distance = faceapi.euclideanDistance(detections.descriptor, userFaceDescriptor);
       if (distance >= 0.6) { // Adjust threshold as needed
         throw new Error('Face not recognized. Please try again or use your password to log in.');
       }
 
-      // Authenticate with Firebase using email and password
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       alert('Face recognized. Login Successful!');
-      navigate('/'); // Navigate to the main page
+      navigate('/');
 
     } catch (error) {
       alert('Login failed: ' + error.message);
