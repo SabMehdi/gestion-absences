@@ -13,7 +13,9 @@ function Registration() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [modelsLoaded, setModelsLoaded] = useState(false);
-
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [birthdate, setBirthdate] = useState('');
   const navigate = useNavigate();
 
   const videoRef = useRef(null);
@@ -98,6 +100,10 @@ function Registration() {
         const userRef = dbRef(database, 'users/' + userUid);
         await set(userRef, {
           email: email,
+          firstName: firstName,
+          lastName: lastName,
+          birthdate: birthdate,
+          email: email,
           profileImage: downloadURL,
           faceDescriptor: detections.descriptor // This is an array of numbers representing the face
         });
@@ -122,6 +128,24 @@ function Registration() {
       {!modelsLoaded && <p>Loading models, please wait...</p>}
       <form className="registration-form" onSubmit={handleRegistration}>
         <h2>Registration</h2>
+        <input
+          type="text"
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        <input
+          type="date"
+          placeholder="Birthdate"
+          value={birthdate}
+          onChange={(e) => setBirthdate(e.target.value)}
+        />
         <input
           type="email"
           placeholder="Email"
