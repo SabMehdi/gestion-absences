@@ -90,7 +90,6 @@ function Attendence() {
         .withFaceDescriptor()
         .withFaceExpressions()
       if (detections) {
-        console.log(detections)
         const capturedDescriptor = detections.descriptor;
         const storedDescriptors = await getAllFaceDescriptorsFromDatabase();
 
@@ -128,16 +127,38 @@ function Attendence() {
   }
   async function saveAttendanceRecord() {
     if (!bestMatch) {
-      alert("no match found to save!")
-      return
+      alert("No match found to save!");
+      return;
     }
-
+  
     const database = getDatabase();
     const sessionRef = dbRef(database, `sessions/${sessionName}/attendants`);
-    const newRecordRef = push(sessionRef);
-    await set(newRecordRef, bestMatch);
-    alert('Attendance recorded successfully.');
-    setBestMatch(null); // Clear the match after saving
+    const existingRecordsRef = dbRef(database, `sessions/${sessionName}/attendants`);
+  
+    try {
+      // Fetch all attendants for the session
+      const snapshot = await get(existingRecordsRef);
+  
+      if (snapshot.exists()) {
+        const attendants = snapshot.val();
+        // Check if a record with the same uid already exists
+        const alreadyRecorded = Object.values(attendants).some(attendant => attendant.uid === bestMatch.uid);
+  
+        if (alreadyRecorded) {
+          alert('Attendance for this user already recorded in this session.');
+          return;
+        }
+      }
+  
+      // Save the new record
+      const newRecordRef = push(sessionRef);
+      await set(newRecordRef, bestMatch);
+      alert('Attendance recorded successfully.');
+      setBestMatch(null); // Clear the match after saving
+    } catch (error) {
+      console.error('Error saving attendance record:', error.message);
+      alert('Error saving attendance record: ' + error.message);
+    }
   }
 
   return (
