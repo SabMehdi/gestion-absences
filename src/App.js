@@ -9,6 +9,7 @@ import { auth } from './firebase';
 import Home from './home';
 import ForgotPassword from './resetPassword';
 import Attendence from './Attendence';
+import SessionCreation from './SessionCreation';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -31,6 +32,7 @@ function App() {
         <Route path='/register' Component={Registration} />
         <Route path='/reset' Component={ForgotPassword} />
         <Route path='/attendence' Component={Attendence} />
+        <Route path='/sessionCreation' Component={SessionCreation} />
 
       </Routes>
     </BrowserRouter>
