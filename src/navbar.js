@@ -86,7 +86,7 @@ function Navbar({ user }) {
 
                   {isAdmin && (
                     <ul>
-                      <li> <Link to={"/attendence"} style={{ color: 'white' }}>Créer séance</Link></li>
+                      <li> <Link to={"/sessionCreation"} style={{ color: 'white' }}>Créer séance</Link></li>
                     </ul>
                   )}
 

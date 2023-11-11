@@ -1,12 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
-import { getDatabase, ref as dbRef, get } from 'firebase/database';
+import { getDatabase, ref as dbRef, get, push, set } from 'firebase/database';
 import "./Attendence.css"
+import { useLocation } from 'react-router-dom';
+
 function Attendence() {
+  const location = useLocation();
+  const sessionName = location.state?.sessionName;
   const [imageData, setImageData] = useState(null);
   const [expressions, setExpressions] = useState(null);
   const videoRef = useRef(null);
   const [loadedModels, setLoadedModels] = useState(false);
+  const [bestMatch, setBestMatch] = useState(null); // State to store the best match
 
   useEffect(() => {
     const loadModels = async () => {
@@ -102,8 +107,14 @@ function Attendence() {
 
         if (bestMatch.distance < 0.6) {
           console.log(`Match found! User ID: ${bestMatch.uid}`);
+          setBestMatch({
+            uid: bestMatch.uid,
+            time: new Date().toISOString(),
+            mood: extractDominantMood(detections.expressions),
+          });
         } else {
           console.log('No match found.');
+          setBestMatch(null)
         }
       }
     } catch (error) {
@@ -111,6 +122,23 @@ function Attendence() {
       alert('Error taking picture or detecting mood: ' + error.message)
     }
   };
+  function extractDominantMood(expressions) {
+    return Object.entries(expressions)
+      .reduce((max, current) => current[1] > max[1] ? current : max, ['', 0])[0];
+  }
+  async function saveAttendanceRecord() {
+    if (!bestMatch) {
+      alert("no match found to save!")
+      return
+    }
+
+    const database = getDatabase();
+    const sessionRef = dbRef(database, `sessions/${sessionName}/attendants`);
+    const newRecordRef = push(sessionRef);
+    await set(newRecordRef, bestMatch);
+    alert('Attendance recorded successfully.');
+    setBestMatch(null); // Clear the match after saving
+  }
 
   return (
     <div className="mood-analysis-container">
@@ -147,10 +175,10 @@ function Attendence() {
         )}
       </div>
       <div className="buttons-container">
-        <button className="custom-btn" onClick={() => {/* Functionality to be added */ }}>
-          Button 1
+        <button className="custom-btn" onClick={saveAttendanceRecord}>
+          Save Attendance
         </button>
-        <button className="custom-btn" onClick={() => {/* Functionality to be added */ }}>
+        <button className="custom-btn" onClick={() => { /* Functionality for Button 2 */ }}>
           Button 2
         </button>
       </div>
