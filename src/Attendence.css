@@ -1,0 +1,85 @@
+.mood-analysis-container {
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+}
+
+.content-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.webcam-container,
+.image-preview-container {
+    flex: 1;
+}
+
+.webcam-video {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.take-picture-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.captured-image {
+    width: 100%;
+    border-radius: 4px;
+}
+
+.expressions-container {
+    margin-top: 20px;
+}
+
+.expressions-list {
+    list-style: none;
+    padding: 0;
+}
+
+.expression-item {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+.buttons-container {
+    margin-top: 20px;
+}
+
+.custom-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    font-size: 1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+}
+
+.custom-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Add responsiveness */
+@media (max-width: 768px) {
+    .content-container {
+        flex-direction: column;
+    }
+
+    .webcam-container,
+    .image-preview-container {
+        flex-basis: 100%;
+    }
+}
