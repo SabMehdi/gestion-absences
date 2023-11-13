@@ -1,19 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';  
 
 function Home() {
   return (
-    <div>
-      <h2>Accueil</h2>
-      <Link to="/register">
-        <button>Nouveau étudiant</button>
-      </Link>
-      <Link to="/login">
-        <button>Ancien étudiant</button>
-      </Link>
-      <Link to="/login">
-        <button>Professeur</button>
-      </Link>
+    <div className="home">
+      <h1>Welcome to the Home Page</h1>
+      <p>This is your home page content. You can customize it as you like.</p>
     </div>
   );
 }
