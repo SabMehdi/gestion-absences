@@ -6,10 +6,10 @@ import Registration from './register';
 import React, { useState, useEffect } from 'react';
 import Navbar from './navbar';
 import { auth } from './firebase';
-import Home from './Home';
 import ForgotPassword from './resetPassword';
 import Attendence from './Attendence';
 import SessionCreation from './SessionCreation';
+import Home from './Home';
 function App() {
   const [user, setUser] = useState(null);
 
