@@ -9,7 +9,7 @@ import { auth } from './firebase';
 import ForgotPassword from './resetPassword';
 import Attendence from './Attendence';
 import SessionCreation from './SessionCreation';
-import Home from './Home';
+import DashBoard from './DashBoard';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -27,7 +27,7 @@ function App() {
     <BrowserRouter>
       <Navbar user={user} />
       <Routes>
-        <Route path='/' Component={Home} />
+        <Route path='/' Component={DashBoard} />
         <Route path='/login' Component={Login} />
         <Route path='/register' Component={Registration} />
         <Route path='/reset' Component={ForgotPassword} />
