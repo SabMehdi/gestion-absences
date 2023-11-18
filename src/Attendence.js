@@ -130,26 +130,26 @@ function Attendence() {
       alert("No match found to save!");
       return;
     }
-  
+
     const database = getDatabase();
     const sessionRef = dbRef(database, `sessions/${sessionName}/attendants`);
     const existingRecordsRef = dbRef(database, `sessions/${sessionName}/attendants`);
-  
+
     try {
       // Fetch all attendants for the session
       const snapshot = await get(existingRecordsRef);
-  
+
       if (snapshot.exists()) {
         const attendants = snapshot.val();
         // Check if a record with the same uid already exists
         const alreadyRecorded = Object.values(attendants).some(attendant => attendant.uid === bestMatch.uid);
-  
+
         if (alreadyRecorded) {
           alert('Attendance for this user already recorded in this session.');
           return;
         }
       }
-  
+
       // Save the new record
       const newRecordRef = push(sessionRef);
       await set(newRecordRef, bestMatch);
@@ -158,6 +158,32 @@ function Attendence() {
     } catch (error) {
       console.error('Error saving attendance record:', error.message);
       alert('Error saving attendance record: ' + error.message);
+    }
+  }
+  async function finishRegistration() {
+    const database = getDatabase();
+    const usersRef = dbRef(database, 'users/');
+    const attendantsRef = dbRef(database, `sessions/${sessionName}/attendants`);
+    const absentsRef = dbRef(database, `sessions/${sessionName}/absents`);
+
+    try {
+      const usersSnapshot = await get(usersRef);
+      const attendantsSnapshot = await get(attendantsRef);
+
+      const users = usersSnapshot.exists() ? usersSnapshot.val() : {};
+      const attendants = attendantsSnapshot.exists() ? attendantsSnapshot.val() : {};
+
+      const absentUsers = Object.keys(users).filter(uid => !Object.values(attendants).some(attendant => attendant.uid === uid));
+
+      absentUsers.forEach(async uid => {
+        const absentUserRef = push(absentsRef);
+        await set(absentUserRef, { uid, time: new Date().toISOString() });
+      });
+
+      alert('Registration finished, absentees recorded.');
+    } catch (error) {
+      console.error('Error finishing registration:', error.message);
+      alert('Error finishing registration: ' + error.message);
     }
   }
 
@@ -199,8 +225,8 @@ function Attendence() {
         <button className="custom-btn" onClick={saveAttendanceRecord}>
           Save Attendance
         </button>
-        <button className="custom-btn" onClick={() => { /* Functionality for Button 2 */ }}>
-          Button 2
+        <button className="custom-btn" onClick={finishRegistration}>
+          Finish registration
         </button>
       </div>
     </div>
