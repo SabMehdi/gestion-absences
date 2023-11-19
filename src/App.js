@@ -6,13 +6,13 @@ import Registration from './register';
 import React, { useState, useEffect } from 'react';
 import CustomNavbar from './Navbar'
 import { auth } from './firebase';
-import Home from './home';
 import ForgotPassword from './resetPassword';
 import Attendence from './Attendence';
 import SessionCreation from './SessionCreation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Sessions from './Sessions';
 
+import DashBoard from './DashBoard';
 function App() {
   const [user, setUser] = useState(null);
 
