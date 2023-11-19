@@ -4,14 +4,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './login';
 import Registration from './register';
 import React, { useState, useEffect } from 'react';
-import CustomNavbar from './Navbar'
+import CustomNavbar from './navbar'
 import { auth } from './firebase';
 import ForgotPassword from './resetPassword';
 import Attendence from './Attendence';
 import SessionCreation from './SessionCreation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Sessions from './Sessions';
-
+import Home from './home';
 import DashBoard from './DashBoard';
 function App() {
   const [user, setUser] = useState(null);
