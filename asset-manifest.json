@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/gestion-absences/static/css/main.0be24772.css",
-    "main.js": "/gestion-absences/static/js/main.79994c50.js",
+    "main.css": "/gestion-absences/static/css/main.1226a9b4.css",
+    "main.js": "/gestion-absences/static/js/main.bdba5f21.js",
     "static/js/787.0a0a8a86.chunk.js": "/gestion-absences/static/js/787.0a0a8a86.chunk.js",
     "static/media/logo.svg": "/gestion-absences/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/gestion-absences/index.html",
-    "main.0be24772.css.map": "/gestion-absences/static/css/main.0be24772.css.map",
-    "main.79994c50.js.map": "/gestion-absences/static/js/main.79994c50.js.map",
+    "main.1226a9b4.css.map": "/gestion-absences/static/css/main.1226a9b4.css.map",
+    "main.bdba5f21.js.map": "/gestion-absences/static/js/main.bdba5f21.js.map",
     "787.0a0a8a86.chunk.js.map": "/gestion-absences/static/js/787.0a0a8a86.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.0be24772.css",
-    "static/js/main.79994c50.js"
+    "static/css/main.1226a9b4.css",
+    "static/js/main.bdba5f21.js"
   ]
 }
