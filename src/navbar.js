@@ -55,8 +55,11 @@ function CustomNavbar({ user }) {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
-          <LinkContainer to="/">
+        <LinkContainer to="/">
             <Nav.Link>Home</Nav.Link>
+          </LinkContainer>
+          <LinkContainer to="/sessions">
+            <Nav.Link>Sessions</Nav.Link>
           </LinkContainer>
          
         </Nav>

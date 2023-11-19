@@ -26,7 +26,7 @@ function Home() {
       <div className="user-cards">
         {users.map(user => (
           <div className="user-card" key={user.id}>
-            <img src={user.profileImage} alt={`${user.firstName} ${user.lastName}`} className="user-image" />
+            <img src={user.profileImage} alt={`${user.firstName} ${user.lastName}`} className="home-user-image" />
             <div className="user-info">
               <h3>{user.firstName} {user.lastName}</h3>
               <p>{user.email}</p>

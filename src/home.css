@@ -1,39 +1,44 @@
 .home {
     padding: 20px;
-  }
-  
-  .user-cards {
+}
+
+.user-cards {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Adjust as needed */
+    gap: 20px;
+    /* Adjust as needed */
     justify-content: center;
-  }
-  
-  .user-card {
+}
+
+.user-card:hover {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.user-card {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
-    width: 250px; /* Adjust width as needed */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    /* Adjust width as needed */
     text-align: center;
-  }
-  
-  .user-image {
-    width: 100px;
-    height: 100px;
+}
+
+.home-user-image {
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
-  }
-  
-  .user-info h3 {
+}
+
+.user-info h3 {
     margin: 0;
     font-size: 1.2em;
     color: #333;
-  }
-  
-  .user-info p {
+}
+
+.user-info p {
     margin: 5px 0;
     color: #666;
-  }
-  
+}

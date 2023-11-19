@@ -14,6 +14,10 @@ function Attendence() {
   const [bestMatch, setBestMatch] = useState(null); // State to store the best match
 
   useEffect(() => {
+    const sessionTimeRef = dbRef(getDatabase(), `sessions/${sessionName}/time`);
+    const currentTime = new Date().toISOString(); // Current time for the session
+    set(sessionTimeRef, currentTime);
+
     const loadModels = async () => {
       try {
         await Promise.all([
