@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getDatabase, ref, onValue } from 'firebase/database';
+import './home.css'; // Assuming you will create this CSS file for styling
 
 function Home() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const database = getDatabase();
+    const usersRef = ref(database, 'users/');
+    const unsubscribe = onValue(usersRef, (snapshot) => {
+      const usersData = snapshot.val();
+      const usersList = usersData ? Object.keys(usersData).map(key => ({
+        ...usersData[key],
+        id: key
+      })) : [];
+      setUsers(usersList);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="home">
-      <h1>Welcome to the Home Page</h1>
-      <p>This is your home page content. You can customize it as you like.</p>
+      <h1>M2 THYP</h1>
+      <div className="user-cards">
+        {users.map(user => (
+          <div className="user-card" key={user.id}>
+            <img src={user.profileImage} alt={`${user.firstName} ${user.lastName}`} className="user-image" />
+            <div className="user-info">
+              <h3>{user.firstName} {user.lastName}</h3>
+              <p>{user.email}</p>
+              <p>{user.birthdate}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

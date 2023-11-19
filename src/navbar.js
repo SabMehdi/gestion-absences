@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { auth } from './firebase';
-import './Navbar.css';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
-
-function Navbar({ user }) {
-  const [showDropdown, setShowDropdown] = useState(false);
+import  "./Navbar.css"
+function CustomNavbar({ user }) {
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-    console.log("User object:", user);
-
-  };
   const handleSignOut = async () => {
     try {
       await auth.signOut();
@@ -54,54 +48,41 @@ function Navbar({ user }) {
       return false;
     }
   }
+
   return (
-    <nav className="navbar">
-      <ul className="nav-list">
-        <li className="nav-item">
-          <Link to="/" className="nav-link">Home</Link>
-        </li>
-        <li className="nav-item">
-          {user ? (
-            <div>
-              <ul>
-                <li onClick={toggleDropdown}>
-                  Welcome, {user.email}
-                  {showDropdown ? (
-                    <span className="dropdown-icon">&#9650;</span>
-                  ) : (
-                    <span className="dropdown-icon">&#9660;</span>
-                  )}
-                </li>
-              </ul>
-
-              {showDropdown && (
-                <div className="dropdown">
-                  <ul>
-                    <li onClick={handleSignOut}> <Link to={"/"} style={{ color: 'white' }}>Sign Off</Link></li>
-                  </ul>
-                  <ul>
-                    <li> <Link to={"/reset"} style={{ color: 'white' }}>Change Password</Link></li>
-                  </ul>
-
-
-                  {isAdmin && (
-                    <ul>
-                      <li> <Link to={"/sessionCreation"} style={{ color: 'white' }}>Créer séance</Link></li>
-                    </ul>
-                  )}
-
-                </div>
-              )}
-            </div>
+    <Navbar bg="light" expand="lg">
+      <Navbar.Brand href="/">Attendance App</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="ml-auto">
+          <LinkContainer to="/">
+            <Nav.Link>Home</Nav.Link>
+          </LinkContainer>
+         
+        </Nav>
+      </Navbar.Collapse>
+      {user ? (
+            <>
+              <NavDropdown title={`Welcome, ${user.email}`} id="basic-nav-dropdown">
+                <LinkContainer to="/reset">
+                  <NavDropdown.Item>Change Password</NavDropdown.Item>
+                </LinkContainer>
+                {isAdmin && (
+                  <LinkContainer to="/sessionCreation">
+                    <Nav.Link>Créer séance</Nav.Link>
+                  </LinkContainer>
+                )}
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleSignOut}>Sign Off</NavDropdown.Item>
+              </NavDropdown>
+            </>
           ) : (
-            <Link to="/login" className='login-btn'>
-              Log In
-            </Link>
+            <LinkContainer to="/login">
+              <Nav.Link>Log In</Nav.Link>
+            </LinkContainer>
           )}
-        </li>
-      </ul>
-    </nav>
+    </Navbar>
   );
 }
 
-export default Navbar;
+export default CustomNavbar;
