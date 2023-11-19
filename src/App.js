@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './login';
 import Registration from './register';
 import React, { useState, useEffect } from 'react';
-import CustomNavbar from './Navbar'
+import CustomNavbar from './navbar'
 import { auth } from './firebase';
 import Home from './home';
 import ForgotPassword from './resetPassword';
