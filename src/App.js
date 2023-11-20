@@ -4,12 +4,15 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './login';
 import Registration from './register';
 import React, { useState, useEffect } from 'react';
-import Navbar from './navbar';
+import CustomNavbar from './navbar'
 import { auth } from './firebase';
-import Home from './Home';
 import ForgotPassword from './resetPassword';
 import Attendence from './Attendence';
 import SessionCreation from './SessionCreation';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Sessions from './Sessions';
+import Home from './home';
+import DashBoard from './DashBoard';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -25,9 +28,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Navbar user={user} />
+      <CustomNavbar user={user} />
       <Routes>
         <Route path='/' Component={Home} />
+        <Route path='/Sessions' Component={Sessions} />
+
         <Route path='/login' Component={Login} />
         <Route path='/register' Component={Registration} />
         <Route path='/reset' Component={ForgotPassword} />

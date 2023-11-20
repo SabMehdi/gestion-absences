@@ -1,0 +1,88 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix mydb: <http://example.org/mydb#> .
+
+# Class definitions
+mydb:User a rdfs:Class ;
+    rdfs:label "User" .
+
+mydb:Session a rdfs:Class ;
+    rdfs:label "Session" .
+
+mydb:AttendanceRecord a rdfs:Class ;
+    rdfs:label "Attendance Record" .
+
+mydb:AbsenceRecord a rdfs:Class ;
+    rdfs:label "Absence Record" .
+
+# Property definitions
+mydb:uid a rdfs:Property ;
+    rdfs:label "User ID" ;
+    rdfs:domain mydb:User ;
+    rdfs:range xsd:string .
+
+mydb:firstName a rdfs:Property ;
+    rdfs:label "First Name" ;
+    rdfs:domain mydb:User ;
+    rdfs:range xsd:string .
+
+mydb:lastName a rdfs:Property ;
+    rdfs:label "Last Name" ;
+    rdfs:domain mydb:User ;
+    rdfs:range xsd:string .
+
+mydb:email a rdfs:Property ;
+    rdfs:label "Email" ;
+    rdfs:domain mydb:User ;
+    rdfs:range xsd:string .
+
+mydb:birthdate a rdfs:Property ;
+    rdfs:label "Birthdate" ;
+    rdfs:domain mydb:User ;
+    rdfs:range xsd:date .
+
+mydb:isAdmin a rdfs:Property ;
+    rdfs:label "Is Admin" ;
+    rdfs:domain mydb:User ;
+    rdfs:range xsd:boolean .
+
+mydb:profileImage a rdfs:Property ;
+    rdfs:label "Profile Image" ;
+    rdfs:domain mydb:User ;
+    rdfs:range xsd:anyURI .
+
+mydb:sessionId a rdfs:Property ;
+    rdfs:label "Session ID" ;
+    rdfs:domain mydb:Session ;
+    rdfs:range xsd:string .
+
+mydb:sessionName a rdfs:Property ;
+    rdfs:label "Session Name" ;
+    rdfs:domain mydb:Session ;
+    rdfs:range xsd:string .
+
+mydb:recordId a rdfs:Property ;
+    rdfs:label "Record ID" ;
+    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
+    rdfs:range xsd:integer .
+
+mydb:mood a rdfs:Property ;
+    rdfs:label "Mood" ;
+    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
+    rdfs:range xsd:string .
+
+mydb:time a rdfs:Property ;
+    rdfs:label "Time" ;
+    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
+    rdfs:range xsd:dateTime .
+
+# Foreign Key Relationships
+mydb:hasSession a rdfs:Property ;
+    rdfs:label "Has Session" ;
+    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
+    rdfs:range mydb:Session .
+
+mydb:hasUser a rdfs:Property ;
+    rdfs:label "Has User" ;
+    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
+    rdfs:range mydb:User .
