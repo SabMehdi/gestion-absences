@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { auth } from './firebase';
+import { auth } from '../firebase/firebase';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
-import  "./Navbar.css"
+import '../../style/Navbar.css';
 function CustomNavbar({ user }) {
   const [isAdmin, setIsAdmin] = useState(false);
 

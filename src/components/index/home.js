@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import './home.css'; // Assuming you will create this CSS file for styling
+import '../../style/home.css'; // Assuming you will create this CSS file for styling
 
 function Home() {
   const [users, setUsers] = useState([]);

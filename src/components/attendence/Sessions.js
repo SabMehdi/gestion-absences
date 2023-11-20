@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import "./Sessions.css"
+import "../../style/Sessions.css"
 function Sessions() {
   const [sessions, setSessions] = useState([]);
   const [users, setUsers] = useState({});

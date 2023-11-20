@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 import { getDatabase, ref as dbRef, get, push, set } from 'firebase/database';
-import "./Attendence.css"
 import { useLocation } from 'react-router-dom';
-
+import "../../style/Attendence.css"
 function Attendence() {
   const location = useLocation();
   const sessionName = location.state?.sessionName;

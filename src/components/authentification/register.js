@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { auth } from './firebase';
+import { auth } from '../firebase/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import './Registration.css';
+import '../../style/Registration.css';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { getDatabase, ref as dbRef, set } from 'firebase/database';
 import { getStorage } from 'firebase/storage';

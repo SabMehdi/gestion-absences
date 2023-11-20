@@ -1,17 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from './login';
-import Registration from './register';
+import Login from './components/authentification/login';
+import Registration from './components/authentification/register';
 import React, { useState, useEffect } from 'react';
-import CustomNavbar from './navbar'
-import { auth } from './firebase';
-import Home from './home';
-import ForgotPassword from './resetPassword';
-import Attendence from './Attendence';
-import SessionCreation from './SessionCreation';
+import CustomNavbar from './components/nav/navbar';
+import { auth } from './components/firebase/firebase';
+import Home from './components/index/home';
+import ForgotPassword from './components/authentification/resetPassword';
+import Attendence from './components/attendence/Attendence';
+import SessionCreation from './components/attendence/SessionCreation';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Sessions from './Sessions';
+import Sessions from './components/attendence/Sessions';
 
 function App() {
   const [user, setUser] = useState(null);

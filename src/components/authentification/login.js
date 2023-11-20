@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { auth } from './firebase';
+import { auth } from '../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import './Login.css'; // Import your CSS stylesheet
+import '../../style/Login.css'; // Import your CSS stylesheet
 import * as faceapi from 'face-api.js';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 
