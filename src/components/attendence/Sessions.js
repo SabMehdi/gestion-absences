@@ -35,28 +35,37 @@ function Sessions() {
         <div>
           <strong>Attendants:</strong>
           <ul>
-            {session.attendants && Object.entries(session.attendants).map(([key, attendant]) => (
-              <li key={key}>
-                {users[attendant.uid] && <img src={users[attendant.uid].profileImage} alt={users[attendant.uid].firstName} className="session-user-image" />}
-                {attendant.uid} - {attendant.mood} - {new Date(session.time).toLocaleString()}
-              </li>
-            ))}
+            {session.attendants && Object.entries(session.attendants).map(([key, attendant]) => {
+              const user = users[attendant.uid];
+              const fullName = user ? `${user.firstName} ${user.lastName}` : 'Unknown';
+              return (
+                <li key={key}>
+                  {user && <img src={user.profileImage} alt={fullName} className="session-user-image" />}
+                  {fullName} - {attendant.mood} - {new Date(session.time).toLocaleString()}
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div>
           <strong>Absents:</strong>
           <ul>
-            {session.absents && Object.entries(session.absents).map(([key, absent]) => (
-              <li key={key}>
-                {users[absent.uid] && <img src={users[absent.uid].profileImage} alt={users[absent.uid].firstName} className="session-user-image" />}
-                {absent.uid}
-              </li>
-            ))}
+            {session.absents && Object.entries(session.absents).map(([key, absent]) => {
+              const user = users[absent.uid];
+              const fullName = user ? `${user.firstName} ${user.lastName}` : 'Unknown';
+              return (
+                <li key={key}>
+                  {user && <img src={user.profileImage} alt={fullName} className="session-user-image" />}
+                  {fullName}
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>
     );
   }
+  
   
   // SessionList component to list all sessions
   function SessionList({ sessions }) {
