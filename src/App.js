@@ -13,6 +13,7 @@ import SessionCreation from './components/attendence/SessionCreation';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Sessions from './components/attendence/Sessions';
 import AttendanceAreaChart from './charts/attendanceTrends';
+import MoodHeatmap from './charts/Mood';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -34,6 +35,7 @@ function App() {
         <Route path='/' Component={Home} />
         <Route path='/Sessions' Component={Sessions} />
         <Route path='/attendanceTrends' Component={AttendanceAreaChart} />
+        <Route path='/mood' Component={MoodHeatmap} />
 
         <Route path='/login' Component={Login} />
         <Route path='/register' Component={Registration} />

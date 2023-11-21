@@ -54,7 +54,7 @@ function AttendanceAreaChart() {
 
   return (
     <div>
-      <h2>Attendance Trends</h2>
+      <h2>Absences par séance</h2>
       <div style={{ width: '70%', height: '500px', margin: '0 auto' }}>
         <Line data={chartData} />
       </div>
