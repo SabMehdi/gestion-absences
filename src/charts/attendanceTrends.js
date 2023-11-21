@@ -55,7 +55,9 @@ function AttendanceAreaChart() {
   return (
     <div>
       <h2>Attendance Trends</h2>
-      <Line data={chartData} />
+      <div style={{ width: '70%', height: '500px', margin: '0 auto' }}>
+        <Line data={chartData} />
+      </div>
     </div>
   );
 }

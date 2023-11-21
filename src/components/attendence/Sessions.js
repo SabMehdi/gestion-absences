@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import "../../style/Sessions.css"
+import "../../style/Sessions.css";
+
 function Sessions() {
   const [sessions, setSessions] = useState([]);
   const [users, setUsers] = useState({});
+  const [filterDate, setFilterDate] = useState(null);
 
   useEffect(() => {
     const db = getDatabase();
@@ -26,8 +28,11 @@ function Sessions() {
 
     return () => unsubscribe();
   }, []);
+  function handleDateFilterChange(event) {
+    const selectedDate = new Date(event.target.value);
+    setFilterDate(selectedDate);
+  }
 
-  // SessionCard component to display each session's details
   function SessionCard({ session }) {
     return (
       <div className="session-card">
@@ -41,7 +46,7 @@ function Sessions() {
               return (
                 <li key={key}>
                   {user && <img src={user.profileImage} alt={fullName} className="session-user-image" />}
-                  {fullName} - {attendant.mood} - {new Date(session.time).toLocaleString()}
+                  {fullName} - {attendant.mood} - {new Date(attendant.time).toLocaleString()}
                 </li>
               );
             })}
@@ -65,13 +70,16 @@ function Sessions() {
       </div>
     );
   }
-  
-  
-  // SessionList component to list all sessions
+
   function SessionList({ sessions }) {
+    const filteredSessions = filterDate
+      ? sessions.filter(session => 
+          new Date(session.time).toDateString() === filterDate.toDateString())
+      : sessions;
+
     return (
       <div className="session-list">
-        {sessions.map((session) => (
+        {filteredSessions.map((session) => (
           <SessionCard key={session.sessionId} session={session} />
         ))}
       </div>
@@ -81,9 +89,9 @@ function Sessions() {
   return (
     <div className="sessions">
       <h1>Sessions</h1>
+      <input type="date" onChange={handleDateFilterChange} />
       <SessionList sessions={sessions} />
     </div>
   );
 }
-
 export default Sessions;
