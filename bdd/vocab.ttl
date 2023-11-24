@@ -1,88 +1,95 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix mydb: <http://example.org/mydb#> .
+@prefix vs: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix o: <http://omeka.org/s/vocabs/o#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix Fd: <https://faceDetection.univ-paris8.fr/onto/Fd#> .
+@prefix ma: <http://www.w3.org/ns/ma-ont#>.
 
-# Class definitions
-mydb:User a rdfs:Class ;
-    rdfs:label "User" .
+<https://faceDetection.univ-paris8.fr/onto/Fd#> a owl:Ontology ;
+    dcterms:title "face Detection" .
 
-mydb:Session a rdfs:Class ;
-    rdfs:label "Session" .
+Fd:mail a rdfs:Class ;
+    rdfs:label "User" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:AttendanceRecord a rdfs:Class ;
-    rdfs:label "Attendance Record" .
+Fd:person a rdfs:Class ;
+    rdfs:label "Session" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:AbsenceRecord a rdfs:Class ;
-    rdfs:label "Absence Record" .
+Fd:account a rdfs:Class ;
+    rdfs:label "Attendance Record" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-# Property definitions
-mydb:uid a rdfs:Property ;
+Fd:account a rdfs:Class ;
+    rdfs:label "Absence Record" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+Fd:idPers a rdf:Property ;
     rdfs:label "User ID" ;
-    rdfs:domain mydb:User ;
-    rdfs:range xsd:string .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:firstName a rdfs:Property ;
+Fd:idMail a rdf:Property ;
     rdfs:label "First Name" ;
-    rdfs:domain mydb:User ;
-    rdfs:range xsd:string .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:lastName a rdfs:Property ;
+
+Fd:name a rdf:Property ;
     rdfs:label "Last Name" ;
-    rdfs:domain mydb:User ;
-    rdfs:range xsd:string .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:email a rdfs:Property ;
+Fd:dateNaissance a rdf:Property ;
     rdfs:label "Email" ;
-    rdfs:domain mydb:User ;
-    rdfs:range xsd:string .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:birthdate a rdfs:Property ;
+Fd:mailAdress a rdf:Property ;
     rdfs:label "Birthdate" ;
-    rdfs:domain mydb:User ;
-    rdfs:range xsd:date .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:isAdmin a rdfs:Property ;
+Fd:passWord a rdf:Property ;
     rdfs:label "Is Admin" ;
-    rdfs:domain mydb:User ;
-    rdfs:range xsd:boolean .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:profileImage a rdfs:Property ;
+Fd:sujet a rdf:Property ;
     rdfs:label "Profile Image" ;
-    rdfs:domain mydb:User ;
-    rdfs:range xsd:anyURI .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:sessionId a rdfs:Property ;
+Fd:content a rdf:Property ;
     rdfs:label "Session ID" ;
-    rdfs:domain mydb:Session ;
-    rdfs:range xsd:string .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:sessionName a rdfs:Property ;
+Fd:type a rdf:Property ;
     rdfs:label "Session Name" ;
-    rdfs:domain mydb:Session ;
-    rdfs:range xsd:string .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:recordId a rdfs:Property ;
+Fd:createdAt a rdf:Property ;
     rdfs:label "Record ID" ;
-    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
-    rdfs:range xsd:integer .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:mood a rdfs:Property ;
+
+Fd:sender a rdf:Property ;
     rdfs:label "Mood" ;
-    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
-    rdfs:range xsd:string .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
 
-mydb:time a rdfs:Property ;
+
+Fd:reciever a rdf:Property ;
     rdfs:label "Time" ;
-    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
-    rdfs:range xsd:dateTime .
-
-# Foreign Key Relationships
-mydb:hasSession a rdfs:Property ;
-    rdfs:label "Has Session" ;
-    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
-    rdfs:range mydb:Session .
-
-mydb:hasUser a rdfs:Property ;
-    rdfs:label "Has User" ;
-    rdfs:domain [ mydb:AttendanceRecord, mydb:AbsenceRecord ] ;
-    rdfs:range mydb:User .
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
