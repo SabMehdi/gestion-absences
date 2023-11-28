@@ -1,0 +1,56 @@
+/* UserDashboard.css */
+.user-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f4; /* Light grey background */
+    font-family: 'Arial', sans-serif;
+}
+
+.user-dashboard-container h1 {
+    color: #333; /* Dark grey text */
+    margin-bottom: 20px;
+}
+
+.user-info {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.user-info img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Circular image */
+    border: 3px solid #333; /* Dark grey border */
+    margin-bottom: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.centered-image {
+    display: block; /* Assure que l'image est un block pour le centrage */
+    margin: 0 auto; /* Centre l'image horizontalement */
+    max-width: 100%; /* S'assure que l'image ne dépasse pas le conteneur */
+    height: auto; /* Garde le ratio de l'image */
+    border-radius: 10px; /* Optionnel: Arrondit les coins de l'image */
+}
+
+
+/* Add media queries for responsiveness if needed */
