@@ -14,6 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Sessions from './components/attendence/Sessions';
 import AttendanceAreaChart from './charts/attendanceTrends';
 import MoodHeatmap from './charts/Mood';
+import UserDashboard from './components/authentification/UserDashboard';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -21,6 +22,7 @@ function App() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
+      console.log(user)
     });
 
     return () => {
@@ -42,6 +44,7 @@ function App() {
         <Route path='/reset' Component={ForgotPassword} />
         <Route path='/attendence' Component={Attendence} />
         <Route path='/sessionCreation' Component={SessionCreation} />
+        <Route path='/userDashboard' element={<UserDashboard user={user} />} />
 
       </Routes>
     </BrowserRouter>

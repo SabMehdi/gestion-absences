@@ -34,7 +34,6 @@ function Attendence() {
 
     loadModels();
 
-    // Cleanup function to stop the webcam stream when the component unmounts
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         videoRef.current.srcObject.getTracks().forEach(track => track.stop());
@@ -137,12 +136,10 @@ function Attendence() {
     const existingRecordsRef = dbRef(database, `sessions/${sessionName}/attendants`);
 
     try {
-      // Fetch all attendants for the session
       const snapshot = await get(existingRecordsRef);
 
       if (snapshot.exists()) {
         const attendants = snapshot.val();
-        // Check if a record with the same uid already exists
         const alreadyRecorded = Object.values(attendants).some(attendant => attendant.uid === bestMatch.uid);
 
         if (alreadyRecorded) {
@@ -151,10 +148,9 @@ function Attendence() {
         }
       }
 
-      // Save the new record
       await set(sessionRef, bestMatch);
       alert('Attendance recorded successfully.');
-      setBestMatches(null); // Clear the match after saving
+      setBestMatches(null);
     } catch (error) {
       console.error('Error saving attendance record:', error.message);
       alert('Error saving attendance record: ' + error.message);
@@ -181,12 +177,11 @@ function Attendence() {
           time: new Date().toISOString()
         }));
   
-      // Record all absent users under a single node
       if (absentUsers.length > 0) {
         await set(absentsRef, absentUsers);
       }
   
-      alert('Registration finished, absentees recorded.');
+      alert('Registration finished');
     } catch (error) {
       console.error('Error finishing registration:', error.message);
       alert('Error finishing registration: ' + error.message);

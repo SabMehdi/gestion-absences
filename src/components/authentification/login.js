@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { auth } from '../firebase/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import '../../style/Login.css'; // Import your CSS stylesheet
+import '../../style/Login.css'; 
 import * as faceapi from 'face-api.js';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 
@@ -26,13 +26,13 @@ function Login() {
       const snapshot = await get(userRef);
       if (snapshot.exists()) {
         const userData = snapshot.val();
-        return userData.faceDescriptor; // Assuming 'faceDescriptor' is stored in the database
+        return userData.faceDescriptor; 
       } else {
         throw new Error('No data available for user UID: ' + userUid);
       }
     } catch (error) {
       console.error('Failed to fetch user data:', error);
-      throw error; // Re-throw the error to be handled by the caller
+      throw error; 
     }
   }
   const startWebcam = async () => {
@@ -55,7 +55,7 @@ function Login() {
   }, []);
 
   const takePicture = () => {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement('canvas');//utilisé pour la rendu de graphiques 2D
     const video = videoRef.current;
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -79,15 +79,15 @@ function Login() {
         img.onload = resolve;
       });
 
-      const detections = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+      const detections = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();//1 detecter la presence et generer description du visage
       if (!detections) {
         throw new Error('No face detected, please try again.');
       }
 
-      const userFaceDescriptor = await getFaceDescriptorFromDatabase(email, password);
+      const userFaceDescriptor = await getFaceDescriptorFromDatabase(email, password);//asyn 
 
-      const distance = faceapi.euclideanDistance(detections.descriptor, userFaceDescriptor);
-      if (distance >= 0.6) { // Adjust threshold as needed
+      const distance = faceapi.euclideanDistance(detections.descriptor, userFaceDescriptor);//calcule la distance euclidienne entre deux descripteurs de visage,
+      if (distance >= 0.6) { 
         throw new Error('Face not recognized. Please try again or use your password to log in.');
       }
 
