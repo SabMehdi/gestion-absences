@@ -51,39 +51,35 @@ function CustomNavbar({ user }) {
 
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="/userDashboard">Attendance App</Navbar.Brand>
+      <Navbar.Brand href="/userDashboard">EduFaceCheck</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
-        <LinkContainer to="/">
+          <LinkContainer to="/">
             <Nav.Link>Home</Nav.Link>
           </LinkContainer>
           <LinkContainer to="/sessions">
             <Nav.Link>Sessions</Nav.Link>
           </LinkContainer>
-         
         </Nav>
       </Navbar.Collapse>
+
       {user ? (
-            <>
-              <NavDropdown title={`Welcome, ${user.email}`} id="basic-nav-dropdown">
-                <LinkContainer to="/reset">
-                  <NavDropdown.Item>Change Password</NavDropdown.Item>
-                </LinkContainer>
-                {isAdmin && (
-                  <LinkContainer to="/sessionCreation">
-                    <Nav.Link>Créer séance</Nav.Link>
-                  </LinkContainer>
-                )}
-                <NavDropdown.Divider />
-                <NavDropdown.Item onClick={handleSignOut}>Sign Off</NavDropdown.Item>
-              </NavDropdown>
-            </>
-          ) : (
-            <LinkContainer to="/login">
-              <Nav.Link>Log In</Nav.Link>
+        <>
+          <NavDropdown title={`Welcome, ${user.email}`} id="basic-nav-dropdown">
+            <LinkContainer to="/reset">
+              <NavDropdown.Item>Change Password</NavDropdown.Item>
             </LinkContainer>
-          )}
+            {isAdmin && (
+              <LinkContainer to="/sessionCreation">
+                <Nav.Link>Créer séance</Nav.Link>
+              </LinkContainer>
+            )}
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={handleSignOut}>Sign Off</NavDropdown.Item>
+          </NavDropdown>
+        </>
+      ) : null /* Removed LinkContainer for Login */}
     </Navbar>
   );
 }

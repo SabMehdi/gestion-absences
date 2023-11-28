@@ -27,19 +27,19 @@
     margin-bottom: 20px;
 }
 
+
 .button {
-    display: inline-block;
     padding: 10px 20px;
     margin: 5px;
-    border: none;
+    border: 2px solid mediumslateblue; /* Blue border to match your original button color */
     border-radius: 5px;
-    background-color: #007bff; /* Blue background */
-    color: white;
+    background-color: transparent; /* Make the button background transparent */
+    color: mediumslateblue; /* Blue text color to match the border */
     cursor: pointer;
     text-decoration: none;
     font-size: 16px;
+    transition: color 0.3s ease; /* Smooth transition for color change */
 }
-
 .button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }

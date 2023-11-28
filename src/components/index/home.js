@@ -22,7 +22,7 @@ function Home() {
 
   return (
     <div className="home">
-      <h1>M2 THYP</h1>
+      <h1></h1>
       <div className="user-cards">
         {users.map(user => (
           <div className="user-card" key={user.id}>

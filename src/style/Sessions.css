@@ -1,51 +1,79 @@
+/* Existing styles for sessions */
 .sessions {
-    padding: 20px;
-  }
-  
-  .session-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .session-card {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 15px;
-    background-color: #f9f9f9;
-  }
-  .session-card:hover {
-    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
 
-  }
-  
-  .session-card h3 {
-    margin-top: 0;
-    color: #333;
-  }
-  
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  ul li {
-    background-color: #e7e7e7;
-    border: 1px solid #d3d3d3;
-    border-radius: 5px;
-    padding: 5px 10px;
-    margin-bottom: 5px;
-    font-size: 0.9em;
-  }
-  
-  strong {
-    color: #555;
-  }
-  .session-user-image {
-    width: 30px; 
-    height: 30px;
-    border-radius: 50%; 
-    margin-right: 10px;
-    object-fit: cover;
-  }
-  
+.session-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.session-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #f9f9f9;
+}
+
+.session-card:hover {
+  box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.session-card h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #e7e7e7;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  font-size: 0.9em;
+}
+
+strong {
+  color: #555;
+}
+
+.session-user-image {
+  width: 30px; 
+  height: 30px;
+  border-radius: 50%; 
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+/* Added styles for the form container and transparent button */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.transparent-button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: 2px solid mediumslateblue;
+  border-radius: 5px;
+  background-color: transparent;
+  color: mediumslateblue;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.transparent-button:hover {
+  background-color: mediumslateblue;
+  color: white;
+}

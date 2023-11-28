@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import "../../style/Sessions.css";
 
 function SessionCreation() {
   const [sessionName, setSessionName] = useState('');
@@ -14,7 +15,7 @@ function SessionCreation() {
   };
 
   return (
-    <div>
+    <div className="form-container"> {/* Apply the form container class */}
       <h1>Create a New Session</h1>
       <form onSubmit={handleSubmit}>
         <input
@@ -24,7 +25,7 @@ function SessionCreation() {
           placeholder="Enter Session Name"
           required
         />
-        <button type="submit">Start Session</button>
+        <button type="submit" className="transparent-button">Start Session</button> {/* Apply the button class */}
       </form>
     </div>
   );

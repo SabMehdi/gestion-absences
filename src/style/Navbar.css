@@ -1,3 +1,41 @@
-.right-aligned-dropdown {
-  
+/* Navbar.css */
+
+/* Changes the background color of the navbar */
+.navbar {
+    background-color: #123456 !important; /* Replace with your desired color */
+}
+
+/* Changes the text color of the navbar brand and links */
+.navbar-brand, .navbar-nav .nav-link {
+    color: mediumslateblue !important; /* Replace with your desired text color */
+}
+
+/* Changes the text color on hover of the navbar brand and links */
+.navbar-brand:hover, .navbar-nav .nav-link:hover {
+    color: mediumslateblue !important; /* Replace with your desired hover color */
+}
+
+/* Specific style for the dropdown menu */
+.nav-dropdown {
+    background-color: mediumslateblue !important; /* Background color for dropdown */
+}
+
+/* Style for dropdown items */
+.nav-dropdown .dropdown-item {
+    color: mediumslateblue !important; /* Text color for dropdown items */
+}
+
+/* Style for dropdown items on hover */
+.nav-dropdown .dropdown-item:hover {
+    background-color: #345678 !important; /* Background color for dropdown items on hover */
+    color: rgb(142, 142, 192) !important; /* Text color for dropdown items on hover */
+}
+
+/* Change navbar toggler icon color */
+.navbar-toggler {
+    border-color: rgb(142, 142, 192)!important; /* Toggler border color */
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 30 30'><path stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>") !important; /* This changes the color of the navbar toggler icon to white */
 }

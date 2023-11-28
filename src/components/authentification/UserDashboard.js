@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, get } from "firebase/database";
 import { useNavigate } from 'react-router-dom';
-import '../../style/UserDashboard.css'; // assuming you have a separate CSS file
-import faceImage from '../../img/face.jpg';
+import '../../style/UserDashboard.css'; // Assuming you have a separate CSS file
+import faceImage from '../../img/face.jpg'; // Make sure this path is correct
 
 function UserDashboard({ user }) {
     const [userData, setUserData] = useState(null);
@@ -20,7 +20,6 @@ function UserDashboard({ user }) {
         get(userRef).then((snapshot) => {
             if (snapshot.exists()) {
                 setUserData(snapshot.val());
-                console.log(userData)
             } else {
                 console.log("No additional data available");
             }
@@ -43,10 +42,11 @@ function UserDashboard({ user }) {
     }
 
     return (
-        <div className="user-dashboard-container">
-            <img src={faceImage} alt="Description" className="centered-image" />
-            <button className="button" onClick={() => navigate('/login')}>Login</button>
-            <button className="button" onClick={() => navigate('/register')}>Register</button>
+        <div className="user-dashboard-container" style={{ backgroundImage: `url(${faceImage})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+            <div className="buttons-container">
+                <button className="button" onClick={() => navigate('/login')}>Login</button>
+                <button className="button" onClick={() => navigate('/register')}>Register</button>
+            </div>
         </div>
     );
 }
