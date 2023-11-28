@@ -10,7 +10,7 @@ function Attendence() {
   const [expressions, setExpressions] = useState(null);
   const videoRef = useRef(null);
   const [loadedModels, setLoadedModels] = useState(false);
-  const [bestMatch, setBestMatch] = useState(null); // State to store the best match
+  const [bestMatch, setBestMatches] = useState([null]); // State to store the best match
 
   useEffect(() => {
     const sessionTimeRef = dbRef(getDatabase(), `sessions/${sessionName}/time`);
@@ -80,54 +80,52 @@ function Attendence() {
       canvas.height = video.videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       const dataURL = canvas.toDataURL('image/jpeg');
-
+  
       setImageData(dataURL);
       let image = new Image();
       image.src = dataURL;
-
+  
       await new Promise((resolve) => {
         image.onload = resolve;
       });
-      const detections = await faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions())
+      const detections = await faceapi.detectAllFaces(image, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
-        .withFaceDescriptor()
-        .withFaceExpressions()
-      if (detections) {
-        const capturedDescriptor = detections.descriptor;
+        .withFaceDescriptors()
+        .withFaceExpressions();
+  
+      if (detections && detections.length > 0) {
         const storedDescriptors = await getAllFaceDescriptorsFromDatabase();
-
-        setExpressions(detections.expressions);
-
-        let bestMatch = { uid: null, distance: Infinity };
-
-        storedDescriptors.forEach(({ uid, descriptor: userDescriptor }) => {
-          const distance = faceapi.euclideanDistance(capturedDescriptor, userDescriptor);
-          if (distance < bestMatch.distance) {
-            bestMatch = { uid, distance };
-          }
-        });
-
-        if (bestMatch.distance < 0.6) {
-          console.log(`Match found! User ID: ${bestMatch.uid}`);
-          setBestMatch({
-            uid: bestMatch.uid,
-            time: new Date().toISOString(),
-            mood: extractDominantMood(detections.expressions),
+        const matches = [];
+  
+        for (const detection of detections) {
+          let bestMatch = { uid: null, distance: Infinity };
+  
+          storedDescriptors.forEach(({ uid, descriptor: userDescriptor }) => {
+            const distance = faceapi.euclideanDistance(detection.descriptor, userDescriptor);
+            if (distance < bestMatch.distance) {
+              bestMatch = { uid, distance, mood: extractDominantMood(detection.expressions) , time: new Date().toISOString()};
+            }
           });
-        } else {
-          console.log('No match found.');
-          setBestMatch(null)
+  
+          if (bestMatch.distance < 0.6) {
+            console.log(`Match found! User ID: ${bestMatch.uid}`);
+            matches.push(bestMatch);
+          }
         }
+  
+        setBestMatches(matches); // Update this to handle an array of matches
       }
     } catch (error) {
-      console.error('Error taking picture or detecting mood:', error.message);
-      alert('Error taking picture or detecting mood: ' + error.message)
+      console.error('Error taking picture or detecting faces:', error.message);
+      alert('Error taking picture or detecting faces: ' + error.message)
     }
   };
+  
   function extractDominantMood(expressions) {
     return Object.entries(expressions)
       .reduce((max, current) => current[1] > max[1] ? current : max, ['', 0])[0];
   }
+
   async function saveAttendanceRecord() {
     if (!bestMatch) {
       alert("No match found to save!");
@@ -154,10 +152,9 @@ function Attendence() {
       }
 
       // Save the new record
-      const newRecordRef = push(sessionRef);
-      await set(newRecordRef, bestMatch);
+      await set(sessionRef, bestMatch);
       alert('Attendance recorded successfully.');
-      setBestMatch(null); // Clear the match after saving
+      setBestMatches(null); // Clear the match after saving
     } catch (error) {
       console.error('Error saving attendance record:', error.message);
       alert('Error saving attendance record: ' + error.message);
@@ -168,27 +165,34 @@ function Attendence() {
     const usersRef = dbRef(database, 'users/');
     const attendantsRef = dbRef(database, `sessions/${sessionName}/attendants`);
     const absentsRef = dbRef(database, `sessions/${sessionName}/absents`);
-
+  
     try {
       const usersSnapshot = await get(usersRef);
       const attendantsSnapshot = await get(attendantsRef);
-
+  
       const users = usersSnapshot.exists() ? usersSnapshot.val() : {};
-      const attendants = attendantsSnapshot.exists() ? attendantsSnapshot.val() : {};
-
-      const absentUsers = Object.keys(users).filter(uid => !Object.values(attendants).some(attendant => attendant.uid === uid));
-
-      absentUsers.forEach(async uid => {
-        const absentUserRef = push(absentsRef);
-        await set(absentUserRef, { uid, time: new Date().toISOString() });
-      });
-
+      const attendants = attendantsSnapshot.exists() ? Object.values(attendantsSnapshot.val()).flat() : [];
+  
+      // Filter out absent users
+      const absentUsers = Object.keys(users).filter(uid => 
+        !attendants.some(attendant => attendant.uid === uid))
+        .map(uid => ({
+          uid,
+          time: new Date().toISOString()
+        }));
+  
+      // Record all absent users under a single node
+      if (absentUsers.length > 0) {
+        await set(absentsRef, absentUsers);
+      }
+  
       alert('Registration finished, absentees recorded.');
     } catch (error) {
       console.error('Error finishing registration:', error.message);
       alert('Error finishing registration: ' + error.message);
     }
   }
+  
 
   return (
     <div className="mood-analysis-container">
