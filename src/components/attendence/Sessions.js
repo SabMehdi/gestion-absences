@@ -11,12 +11,12 @@ function Sessions() {
     const db = getDatabase();
     const sessionsRef = ref(db, 'sessions/');
     const usersRef = ref(db, 'users/');
-  
+
     onValue(usersRef, (snapshot) => {
       const usersData = snapshot.val();
       setUsers(usersData || {});
     });
-  
+
     const unsubscribe = onValue(sessionsRef, (snapshot) => {
       const sessionsData = snapshot.val();
       const sessionsArray = sessionsData ? Object.entries(sessionsData).map(([key, value]) => ({
@@ -41,6 +41,7 @@ function Sessions() {
           <strong>Attendants:</strong>
           <ul>
             {session.attendants && Object.entries(session.attendants).map(([key, attendant]) => {
+
               const user = users[attendant.uid];
               const fullName = user ? `${user.firstName} ${user.lastName}` : 'Unknown';
               return (
@@ -71,10 +72,11 @@ function Sessions() {
     );
   }
 
+
   function SessionList({ sessions }) {
     const filteredSessions = filterDate
-      ? sessions.filter(session => 
-          new Date(session.time).toDateString() === filterDate.toDateString())
+      ? sessions.filter(session =>
+        new Date(session.time).toDateString() === filterDate.toDateString())
       : sessions;
 
     return (

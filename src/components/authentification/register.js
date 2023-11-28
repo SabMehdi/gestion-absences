@@ -108,11 +108,9 @@ function Registration() {
         navigate('/');
       } else {
         console.log("No face detected!");
-        alert("No face detected!")
       }
     } catch (error) {
       console.error("Error during registration:", error);
-      alert('Error during registration: ' + error.message);
     }
   };
 
