@@ -191,6 +191,21 @@ function Attendence() {
 
   return (
     <div className="mood-analysis-container">
+      <div className="icon-heading-container">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="50"
+        height="50"
+        viewBox="0 0 24 24"
+      >
+        <path d="M0 0h24v24H0z" fill="none" />
+        {/* Change the fill color as needed */}
+        <path
+          d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
+          fill="green"
+        />
+      </svg>
+    </div>
       <h2>Attendance Check</h2>
       <div className="content-container">
         {!loadedModels && (
