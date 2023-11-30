@@ -17,9 +17,12 @@
 }
 
 .webcam-video {
-    width: 100%;
-    border: 1px solid #ddd;
+    width: 50%;
+    height: auto;
+    max-width: 50%;
+    border: 2px solid mediumslateblue; /* Add a 2px solid border with mediumslateblue color */
     border-radius: 4px;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 .take-picture-btn,

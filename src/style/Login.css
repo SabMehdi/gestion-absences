@@ -37,7 +37,7 @@
     border: 2px solid mediumslateblue; /* Blue border to match your original button color */
     border-radius: 5px;
     background-color: transparent; /* Make the button background transparent */
-    color: mediumslateblue; /* Blue text color to match the border */
+    color: white; /* Blue text color to match the border */
     cursor: pointer;
     text-decoration: none;
     font-size: 11px;
