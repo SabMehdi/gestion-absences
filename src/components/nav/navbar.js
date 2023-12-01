@@ -4,12 +4,15 @@ import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { auth } from '../firebase/firebase';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 import '../../style/Navbar.css';
+import { useNavigate } from 'react-router-dom';
 function CustomNavbar({ user }) {
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const navigate= useNavigate()
   const handleSignOut = async () => {
     try {
       await auth.signOut();
+     
+      navigate('/userDashboard')
     } catch (error) {
       console.error('Error signing out:', error);
     }
