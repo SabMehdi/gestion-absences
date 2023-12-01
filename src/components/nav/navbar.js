@@ -72,14 +72,14 @@ function CustomNavbar({ user }) {
             </LinkContainer>
             {isAdmin && (
               <LinkContainer to="/sessionCreation">
-                <Nav.Link>Créer séance</Nav.Link>
+                <NavDropdown.Item>Créer séance</NavDropdown.Item>
               </LinkContainer>
             )}
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={handleSignOut}>Sign Off</NavDropdown.Item>
           </NavDropdown>
         </>
-      ) : null /* Removed LinkContainer for Login */}
+      ) : null }
     </Navbar>
   );
 }
