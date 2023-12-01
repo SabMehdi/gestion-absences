@@ -5,6 +5,8 @@ import { auth } from '../firebase/firebase';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 import '../../style/Navbar.css';
 import { useNavigate } from 'react-router-dom';
+import logo from '../../img/logo.png';
+
 function CustomNavbar({ user }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate()
@@ -54,6 +56,7 @@ function CustomNavbar({ user }) {
 
   return (
     <Navbar bg="light" expand="lg">
+       <img src={logo} alt="Logo" className="navbar-logo" />
       <Navbar.Brand href="/userDashboard">EduFaceCheck</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
