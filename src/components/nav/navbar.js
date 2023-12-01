@@ -7,11 +7,11 @@ import '../../style/Navbar.css';
 import { useNavigate } from 'react-router-dom';
 function CustomNavbar({ user }) {
   const [isAdmin, setIsAdmin] = useState(false);
-  const navigate= useNavigate()
+  const navigate = useNavigate()
   const handleSignOut = async () => {
     try {
       await auth.signOut();
-     
+
       navigate('/userDashboard')
     } catch (error) {
       console.error('Error signing out:', error);
@@ -64,7 +64,22 @@ function CustomNavbar({ user }) {
           <LinkContainer to="/sessions">
             <Nav.Link>Sessions</Nav.Link>
           </LinkContainer>
+          {user && isAdmin && (
+          <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+            <LinkContainer to="/mood">
+              <NavDropdown.Item>Change Password</NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/moodline">
+              <NavDropdown.Item>Change Password</NavDropdown.Item>
+            </LinkContainer>
+            <LinkContainer to="/attendanceTrends">
+              <NavDropdown.Item>Change Password</NavDropdown.Item>
+            </LinkContainer>
+          </NavDropdown>
+        )}  
+
         </Nav>
+       
       </Navbar.Collapse>
 
       {user ? (
@@ -82,7 +97,7 @@ function CustomNavbar({ user }) {
             <NavDropdown.Item onClick={handleSignOut}>Sign Off</NavDropdown.Item>
           </NavDropdown>
         </>
-      ) : null }
+      ) : null}
     </Navbar>
   );
 }
