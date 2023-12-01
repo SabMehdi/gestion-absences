@@ -1,65 +1,73 @@
 import React, { useState, useEffect } from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import { getDatabase, ref, onValue } from 'firebase/database';
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
-
-function AttendanceAreaChart() {
-  const [chartData, setChartData] = useState({
-    labels: [], // Dates
-    datasets: [
-      {
-        label: 'Number of Absences',
-        data: [], // Absences count
-        fill: true,
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        borderColor: 'rgba(75,192,192,1)',
-      }
-    ]
-  });
+import Chart from 'chart.js/auto';
+const AttendanceChart = () => {
+  const [sessions, setSessions] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const db = getDatabase();
-    const sessionsRef = ref(db, 'sessions/');
+    const fetchSessions = async () => {
+      const db = getDatabase();
+      const sessionsRef = ref(db, 'sessions/');
 
-    onValue(sessionsRef, (snapshot) => {
-      const sessionsData = snapshot.val();
-      const attendanceCounts = {};
-
-      // Count absences per day
-      Object.values(sessionsData).forEach(session => {
-        const sessionDate = new Date(session.time).toISOString().split('T')[0];
-        const absentCount = session.absents ? Object.keys(session.absents).length : 0;
-
-        if (!attendanceCounts[sessionDate]) {
-          attendanceCounts[sessionDate] = 0;
+      onValue(sessionsRef, (snapshot) => {
+        if (snapshot.exists()) {
+          setSessions(snapshot.val());
         }
-        attendanceCounts[sessionDate] += absentCount;
+        setLoading(false);
       });
+    };
 
-      // Convert data to chart format
-      const dates = Object.keys(attendanceCounts).sort();
-      const counts = dates.map(date => attendanceCounts[date]);
+    fetchSessions();
+  }, []); // Empty dependency array ensures the effect runs once on mount
 
-      setChartData({
-        labels: dates,
-        datasets: [{
-          ...chartData.datasets[0],
-          data: counts
-        }]
-      });
-    });
-  }, []);
+  const sessionLabels = Object.keys(sessions);
+  const absentsData = sessionLabels.map((sessionKey) => sessions[sessionKey].absents.length);
+  const attendantsData = sessionLabels.map((sessionKey) => sessions[sessionKey].attendants.length);
+  console.log(attendantsData)
+  const data = {
+    labels: sessionLabels,
+    datasets: [
+      {
+        label: 'Number of Absents',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgba(255, 99, 132, 1)',
+        borderWidth: 1,
+        data: absentsData,
+      },
+      {
+        label: 'Number of Attendants',
+        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+        data: attendantsData,
+      },
+    ],
+  };
+
+  const options = {
+    scales: {
+      x: {
+        type: 'category',
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
+  };
+  
 
   return (
     <div>
-      <h2>Absences par séance</h2>
-      <div style={{ width: '70%', height: '500px', margin: '0 auto' }}>
-        <Line data={chartData} />
-      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <Bar data={data} options={options} />
+      )}
     </div>
   );
-}
+};
 
-export default AttendanceAreaChart;
+export default AttendanceChart;
