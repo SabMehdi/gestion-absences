@@ -70,13 +70,13 @@ function CustomNavbar({ user }) {
           {user && isAdmin && (
           <NavDropdown title="Dropdown" id="basic-nav-dropdown">
             <LinkContainer to="/mood">
-              <NavDropdown.Item>Change Password</NavDropdown.Item>
+              <NavDropdown.Item>Mood Heatmap</NavDropdown.Item>
             </LinkContainer>
             <LinkContainer to="/moodline">
-              <NavDropdown.Item>Change Password</NavDropdown.Item>
+              <NavDropdown.Item>Mood Trends</NavDropdown.Item>
             </LinkContainer>
             <LinkContainer to="/attendanceTrends">
-              <NavDropdown.Item>Change Password</NavDropdown.Item>
+              <NavDropdown.Item>attedance Number</NavDropdown.Item>
             </LinkContainer>
           </NavDropdown>
         )}  
