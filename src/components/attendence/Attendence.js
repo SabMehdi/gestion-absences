@@ -11,6 +11,7 @@ function Attendence() {
   const videoRef = useRef(null);
   const [loadedModels, setLoadedModels] = useState(false);
   const [bestMatch, setBestMatches] = useState([null]); // State to store the best match
+  const [isPersonIdentified, setIsPersonIdentified] = useState(false);
 
   useEffect(() => {
     const sessionTimeRef = dbRef(getDatabase(), `sessions/${sessionName}/time`);
@@ -113,6 +114,8 @@ function Attendence() {
         }
   
         setBestMatches(matches); // Update this to handle an array of matches
+        setIsPersonIdentified(true);
+
       }
     } catch (error) {
       console.error('Error taking picture or detecting faces:', error.message);
@@ -151,6 +154,8 @@ function Attendence() {
       await set(sessionRef, bestMatch);
       alert('Attendance recorded successfully.');
       setBestMatches(null);
+      setIsPersonIdentified(false);
+
     } catch (error) {
       console.error('Error saving attendance record:', error.message);
       alert('Error saving attendance record: ' + error.message);
@@ -239,10 +244,18 @@ function Attendence() {
         )}
       </div>
       <div className="buttons-container">
-        <button className="custom-btn" onClick={saveAttendanceRecord}>
+        <button
+          className="custom-btn"
+          onClick={saveAttendanceRecord}
+          disabled={!isPersonIdentified}
+        >
           Save Attendance
         </button>
-        <button className="custom-btn" onClick={finishRegistration}>
+        <button
+          className="custom-btn"
+          onClick={finishRegistration}
+        
+        >
           Finish registration
         </button>
       </div>

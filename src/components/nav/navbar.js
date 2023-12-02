@@ -68,7 +68,7 @@ function CustomNavbar({ user }) {
             <Nav.Link>Sessions</Nav.Link>
           </LinkContainer>
           {user && isAdmin && (
-          <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+          <NavDropdown title="Charts" id="basic-nav-dropdown">
             <LinkContainer to="/mood">
               <NavDropdown.Item>Mood Heatmap</NavDropdown.Item>
             </LinkContainer>
