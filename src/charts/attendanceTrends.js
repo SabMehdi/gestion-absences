@@ -24,12 +24,20 @@ const AttendanceChart = () => {
   }, []); // Empty dependency array ensures the effect runs once on mount
 
   // Extract session labels and dates
-  const sessionData = Object.keys(sessions).map((sessionKey) => ({
-    label: sessionKey,
-    date: new Date(sessions[sessionKey].time).toDateString(),
-    absents: sessions[sessionKey].absents.length,
-    attendants: sessions[sessionKey].attendants.length,
-  }));
+  const sessionData = Object.keys(sessions).map((sessionKey) => {
+    const session = sessions[sessionKey];
+
+    if (session && session.absents && session.attendants) {
+      return {
+        label: sessionKey,
+        date: new Date(session.time).toDateString(),
+        absents: session.absents.length,
+        attendants: session.attendants.length,
+      };
+    }
+
+    return null; // Handle the case where data is missing
+  }).filter(Boolean); // Remove null entries from the array
 
   const data = {
     labels: sessionData.map((session) => `${session.label} - ${session.date}`),
@@ -64,13 +72,13 @@ const AttendanceChart = () => {
   };
 
   return (
-    <div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <Bar data={data} options={options} />
-      )}
-    </div>
+    <div style={{ width: 800, height: 600 }}>
+    {loading ? (
+      <p>Loading...</p>
+    ) : (
+      <Bar data={data} options={options} />
+    )}
+  </div>
   );
 };
 

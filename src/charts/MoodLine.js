@@ -71,10 +71,10 @@ function MoodLineChart() {
     }, []); // Fetch data whenever the component mounts
 
     return (
-        <div>
-            <h2>Mood Trends</h2>
-            <Line data={lineChartData} />
-        </div>
+        <div style={{ width: 800, height: 600 }}>
+        <h2>Mood Trends</h2>
+        <Line data={lineChartData} />
+      </div>
     );
 }
 
