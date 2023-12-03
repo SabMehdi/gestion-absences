@@ -34,7 +34,7 @@ function UserDashboard() {
     const fetchUserData = (uid) => {
         const db = getDatabase();
         const userRef = ref(db, 'users/' + uid);
-
+        console.log(userData)
         get(userRef)
             .then((snapshot) => {
                 if (snapshot.exists()) {

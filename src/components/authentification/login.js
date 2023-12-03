@@ -130,8 +130,7 @@ function Login() {
           </div>
         )}
         <button type="submit">Login</button>
-        <div className="additional-options">
-          <button
+        <button
             type="button"
             onClick={() => {
               navigate('/register');
@@ -147,7 +146,6 @@ function Login() {
           >
             Forgot Password
           </button>
-        </div>
       </form>
     </div>
   );

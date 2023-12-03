@@ -12,6 +12,8 @@ function CustomNavbar({ user }) {
   const navigate = useNavigate()
   const handleSignOut = async () => {
     try {
+      localStorage.removeItem('userData');
+
       await auth.signOut();
 
       navigate('/userDashboard')

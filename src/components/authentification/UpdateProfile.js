@@ -1,33 +1,46 @@
-// UpdateProfile.js
-
-import React, { useState, useRef } from 'react';
-import { useEffect } from 'react';
-
+import React, { useState, useRef, useEffect } from 'react';
 import { getDatabase, ref, get, update } from 'firebase/database';
-import { getStorage } from 'firebase/storage';
-
+import { getStorage, getDownloadURL, uploadBytes, ref as sref } from 'firebase/storage';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import * as faceapi from 'face-api.js';
+import { useNavigate } from 'react-router-dom';
+import '../../style/Registration.css';
 
 const UpdateProfile = () => {
     const auth = getAuth();
     const currentUser = auth.currentUser;
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [modelsLoaded, setModelsLoaded] = useState(false);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [birthdate, setBirthdate] = useState('');
+    const [imageData, setImageData] = useState('');
+    const videoRef = useRef(null);
+    const [userData, setUserData] = useState(null);
+    const storage = getStorage();
     const navigate = useNavigate();
 
-    const videoRef = useRef(null);
-    const [imageData, setImageData] = useState(null);
     useEffect(() => {
-        const auth = getAuth();
+        const loadModels = async () => {
+            try {
+                const MODEL_URL = process.env.PUBLIC_URL + '/models';
+                await Promise.all([
+                    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+                    faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
+                ]);
+
+                setModelsLoaded(true);
+                console.log('Face API models loaded');
+                await startWebcam(); // await here
+            } catch (error) {
+                console.error('Face API models failed to load', error);
+            }
+        };
 
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 const storedUserData = JSON.parse(localStorage.getItem('userData'));
-
                 if (storedUserData) {
                     setUserData(storedUserData);
                 } else {
@@ -36,8 +49,32 @@ const UpdateProfile = () => {
             }
         });
 
-        return () => unsubscribe();
+        loadModels();
+
+        return () => {
+            unsubscribe();
+        };
     }, []);
+
+    const startWebcam = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            videoRef.current.srcObject = stream;
+        } catch (error) {
+            console.error('Error accessing webcam:', error);
+            alert('Error accessing webcam:' + error.message);
+        }
+    };
+
+    const takePicture = () => {
+        const canvas = document.createElement('canvas');
+        const video = videoRef.current;
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataURL = canvas.toDataURL('image/jpeg');
+        setImageData(dataURL);
+    };
 
     const fetchUserData = (uid) => {
         const db = getDatabase();
@@ -48,7 +85,6 @@ const UpdateProfile = () => {
                 if (snapshot.exists()) {
                     const userData = snapshot.val();
                     setUserData(userData);
-
                     localStorage.setItem('userData', JSON.stringify(userData));
                 } else {
                     console.log('No additional data available');
@@ -56,76 +92,80 @@ const UpdateProfile = () => {
             })
             .catch((error) => {
                 console.error(error);
-            })
+            });
     };
 
-    const handleUpdate = async () => {
+    const handleUpdate = async (e) => {
+        e.preventDefault(); // Prevent form submission
+
         try {
-            // Capture face descriptor using face-api.js
-            const faceDescriptor = await captureFaceDescriptor();
-
-            // Update user information in Firebase Realtime Database
-            const db = getDatabase();
-            const userRef = ref(db, 'users/' + currentUser.uid); // Use currentUser.uid here
-
-            await update(userRef, { // Use update here
-                firstName,
-                lastName,
-                birthdate: birthday,
-                profileImage,
-                faceDescriptor,
+            let image = new Image();
+            image.src = imageData;
+            await new Promise((resolve) => {
+                image.onload = resolve;
             });
+            const detections = await faceapi.detectSingleFace(image, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptor();
+            if (detections) {
+                const faceDescriptor = detections.descriptor;
 
-            // Update user's profile image in Firebase Storage
-            if (profileImage !== currentUser.photoURL) {
-                const storageRef = getStorage().ref(`profile_images/${currentUser.uid}`);
-                await storageRef.putString(profileImage, 'data_url');
+                const db = getDatabase();
+                console.log(currentUser.uid)
+                const userRef = ref(db, 'users/' + currentUser.uid);
+
+                const imageBlob = await fetch(imageData).then((r) => r.blob());
+                const imageFile = new File([imageBlob], 'profile.jpg', { type: 'image/jpeg' });
+
+                const storageRef = sref(storage, 'profile_images/' + currentUser.uid + '.jpg');
+                const snapshot = await uploadBytes(storageRef, imageFile);
+                const downloadURL = await getDownloadURL(snapshot.ref);
+
+                await update(userRef, {
+                    firstName,
+                    lastName,
+                    birthdate,
+                    profileImage: downloadURL,
+                    faceDescriptor,
+                });
+                const updatedUserData = {
+                    ...userData,
+                    firstName,
+                    lastName,
+                    birthdate,
+                    profileImage: downloadURL,
+                    // Add other updated fields as needed
+                };
+
+                localStorage.setItem('userData', JSON.stringify(updatedUserData));
+
+                navigate('/userDashboard'); // Navigate after successful update
             }
-
-            // Notify parent component about the update
         } catch (error) {
             console.error('Error updating profile:', error.message);
         }
     };
 
-    const captureFaceDescriptor = async () => {
-        // Implement logic to capture face descriptor using face-api.js
-        // You may use the webcam video stream and face-api.js to capture the face descriptor
-        // Example: https://github.com/justadudewhohacks/face-api.js/blob/master/examples/webcam_face_detection.html
-        // Make sure to adapt this function based on your face-api.js setup
-    };
-
-    const startCapture = () => {
-        // Start capturing video from the webcam
-        /*    captureUserMedia(videoRef.current, () => {
-             // Callback function when media capture is successful
-           }); */
-    };
-
     return (
-        <div>
-            <h2>Update Profile</h2>
-            <label>
-                First Name:
-                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-            </label>
-            <label>
-                Last Name:
-                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-            </label>
-            <label>
-                Birthday:
-                <input type="text" value={birthday} onChange={(e) => setBirthday(e.target.value)} />
-            </label>
-            <label>
-                Profile Image URL:
-                <input type="text" value={profileImage} onChange={(e) => setProfileImage(e.target.value)} />
-            </label>
-            <button onClick={handleUpdate}>Update</button>
+        <div className="registration-container">
+            {!modelsLoaded && <p>Loading models, please wait...</p>}
+            <form className="registration-form" onSubmit={handleUpdate}>
+                <h2>Update Profile</h2>
+                <input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <input type="text" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <input type="date" placeholder="Birthdate" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} />
 
-            {/* Add a video element for webcam capture */}
-            <video ref={videoRef} style={{ display: 'none' }} />
-            <button onClick={startCapture}>Start Webcam Capture</button>
+                <div className="webcam-container">
+                    <video ref={videoRef} autoPlay />
+                    <button type="button" onClick={takePicture}>
+                        Take Picture
+                    </button>
+                </div>
+                {imageData && (
+                    <div className="image-preview">
+                        <img src={imageData} alt="User" />
+                    </div>
+                )}
+                <button type="submit">Update Profile</button>
+            </form>
         </div>
     );
 };
