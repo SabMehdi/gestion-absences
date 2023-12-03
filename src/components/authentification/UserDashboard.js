@@ -70,7 +70,7 @@ function UserDashboard() {
                     <h1>Welcome, {userData.firstName}</h1>
                     <img src={userData.profileImage} alt="Profile" />
                     <p>Email: {userData.email}</p>
-                    <button className="button" onClick={() => navigate('/profile-update')}>
+                    <button className="button" onClick={() => navigate('/updateProfile')}>
                         Update Profile
                     </button>
                 </div>

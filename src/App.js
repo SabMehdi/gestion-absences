@@ -17,6 +17,7 @@ import MoodHeatmap from './charts/Mood';
 import UserDashboard from './components/authentification/UserDashboard';
 import AttendanceChart from './charts/attendanceTrends';
 import MoodLineChart from './charts/MoodLine';
+import UpdateProfile from './components/authentification/UpdateProfile';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -47,6 +48,7 @@ function App() {
         <Route path='/attendence' Component={Attendence} />
         <Route path='/sessionCreation' Component={SessionCreation} />
         <Route path='/userDashboard' element={<UserDashboard user={user} />} />
+        <Route path='/updateProfile' Component={UpdateProfile} />
 
       </Routes>
     </BrowserRouter>
