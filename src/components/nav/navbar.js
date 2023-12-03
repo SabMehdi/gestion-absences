@@ -59,7 +59,7 @@ function CustomNavbar({ user }) {
   return (
     <Navbar bg="light" expand="lg">
        <img src={logo} alt="Logo" className="navbar-logo" />
-      <Navbar.Brand href="/userDashboard">EduFaceCheck</Navbar.Brand>
+      <Navbar.Brand href="/userDashboard">Easy Presence</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
@@ -82,12 +82,7 @@ function CustomNavbar({ user }) {
             </LinkContainer>
           </NavDropdown>
         )}  
-
-        </Nav>
-       
-      </Navbar.Collapse>
-
-      {user ? (
+          {user ? (
         <>
           <NavDropdown title={`Welcome, ${user.email}`} id="basic-nav-dropdown">
             <LinkContainer to="/reset">
@@ -103,6 +98,12 @@ function CustomNavbar({ user }) {
           </NavDropdown>
         </>
       ) : null}
+
+        </Nav>
+       
+      </Navbar.Collapse>
+
+    
     </Navbar>
   );
 }

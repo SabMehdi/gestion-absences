@@ -45,7 +45,8 @@
   }
   
   .registration-form button:hover {
-    background-color: mediumslateblue;
+    background-color: mediumslateblue; /* Darker blue on hover */
+    color: white; /* White text color on hover *tion for color change */
   }
   
   .registration-form video {
@@ -63,3 +64,5 @@
     border: 1px solid #ccc;
     border-radius: 5px;
   }
+
+
