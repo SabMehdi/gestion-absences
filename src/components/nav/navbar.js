@@ -58,8 +58,12 @@ function CustomNavbar({ user }) {
 
   return (
     <Navbar bg="light" expand="lg">
-       <img src={logo} alt="Logo" className="navbar-logo" />
-      <Navbar.Brand href="/userDashboard">Easy Presence</Navbar.Brand>
+      <LinkContainer to="/userDashboard">
+        <Navbar.Brand>
+          <img src={logo} alt="Logo" className="navbar-logo" />
+          Easy Presence
+        </Navbar.Brand>
+      </LinkContainer>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="ml-auto">
@@ -70,40 +74,38 @@ function CustomNavbar({ user }) {
             <Nav.Link>Sessions</Nav.Link>
           </LinkContainer>
           {user && isAdmin && (
-          <NavDropdown title="Charts" id="basic-nav-dropdown">
-            <LinkContainer to="/mood">
-              <NavDropdown.Item>Mood Heatmap</NavDropdown.Item>
-            </LinkContainer>
-            <LinkContainer to="/moodline">
-              <NavDropdown.Item>Mood Trends</NavDropdown.Item>
-            </LinkContainer>
-            <LinkContainer to="/attendanceTrends">
-              <NavDropdown.Item>attedance Number</NavDropdown.Item>
-            </LinkContainer>
-          </NavDropdown>
-        )}  
-          {user ? (
-        <>
-          <NavDropdown title={`Welcome, ${user.email}`} id="basic-nav-dropdown">
-            <LinkContainer to="/reset">
-              <NavDropdown.Item>Change Password</NavDropdown.Item>
-            </LinkContainer>
-            {isAdmin && (
-              <LinkContainer to="/sessionCreation">
-                <NavDropdown.Item>Créer séance</NavDropdown.Item>
+            <NavDropdown title="Charts" id="basic-nav-dropdown">
+              <LinkContainer to="/mood">
+                <NavDropdown.Item>Mood Heatmap</NavDropdown.Item>
               </LinkContainer>
-            )}
-            <NavDropdown.Divider />
-            <NavDropdown.Item onClick={handleSignOut}>Sign Off</NavDropdown.Item>
-          </NavDropdown>
-        </>
-      ) : null}
-
+              <LinkContainer to="/moodline">
+                <NavDropdown.Item>Mood Trends</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer to="/attendanceTrends">
+                <NavDropdown.Item>Attendance Number</NavDropdown.Item>
+              </LinkContainer>
+            </NavDropdown>
+          )}
         </Nav>
-       
+        <Navbar.Collapse className="justify-content-end">
+          <Nav>
+            {user ? (
+              <NavDropdown title={`Welcome, ${user.email}`} id="basic-nav-dropdown">
+                <LinkContainer to="/reset">
+                  <NavDropdown.Item>Change Password</NavDropdown.Item>
+                </LinkContainer>
+                {isAdmin && (
+                  <LinkContainer to="/sessionCreation">
+                    <NavDropdown.Item>Create Session</NavDropdown.Item>
+                  </LinkContainer>
+                )}
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleSignOut}>Sign Off</NavDropdown.Item>
+              </NavDropdown>
+            ) : null}
+          </Nav>
+        </Navbar.Collapse>
       </Navbar.Collapse>
-
-    
     </Navbar>
   );
 }

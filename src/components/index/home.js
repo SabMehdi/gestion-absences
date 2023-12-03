@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { getDatabase, ref, onValue } from 'firebase/database';
-import '../../style/home.css'; // Assuming you will create this CSS file for styling
+import StudentHistory from '../attendence/AttendanceHistory';// Import the StudentHistory component
+import '../../style/home.css';
 
 function Home() {
   const [users, setUsers] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
     const database = getDatabase();
@@ -20,12 +22,16 @@ function Home() {
     return () => unsubscribe();
   }, []);
 
+  const handleCardClick = (userId) => {
+    setSelectedUserId(userId);
+  };
+
   return (
     <div className="home">
-      <h1></h1>
+      <h1>Users</h1>
       <div className="user-cards">
         {users.map(user => (
-          <div className="user-card" key={user.id}>
+          <div className="user-card" key={user.id} onClick={() => handleCardClick(user.id)}>
             <img src={user.profileImage} alt={`${user.firstName} ${user.lastName}`} className="home-user-image" />
             <div className="user-info">
               <h3>{user.firstName} {user.lastName}</h3>
@@ -35,6 +41,7 @@ function Home() {
           </div>
         ))}
       </div>
+      {selectedUserId && <StudentHistory userId={selectedUserId} />}
     </div>
   );
 }

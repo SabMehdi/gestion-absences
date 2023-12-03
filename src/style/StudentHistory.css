@@ -1,0 +1,47 @@
+.history-container {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto; /* Adds top and bottom margin, auto margin on left and right for centering */
+
+    max-width: 600px; /* Adjust this value as needed */
+
+}
+
+.history-container h2 {
+    margin: 0 0 20px 0;
+    color: #333;
+}
+
+.history-list {
+    list-style: none;
+    padding: 0;
+}
+
+.history-record {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.history-record:last-child {
+    border-bottom: none;
+}
+
+.history-record.present {
+    color: #4CAF50;
+}
+
+.history-record.absent {
+    color: #F44336;
+}
+
+.history-record-time {
+    font-size: 0.9em;
+    color: #854040;
+}

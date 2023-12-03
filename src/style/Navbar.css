@@ -2,7 +2,7 @@
 
 /* Changes the background color of the navbar */
 .navbar {
-    background-color: #123456 !important; /* Replace with your desired color */
+    background-color: rgba(var(--bs-light-rgb),var(--bs-bg-opacity))!importantt; /* Replace with your desired color */
 }
 
 /* Changes the text color of the navbar brand and links */
