@@ -211,7 +211,7 @@ function Attendence() {
         />
       </svg>
     </div>
-      <h2>Attendance Check</h2>
+      <h2>Attendance Check for session: {sessionName}</h2>
       <div className="content-container">
         {!loadedModels && (
           <div className="loading-models">Loading models...</div>
