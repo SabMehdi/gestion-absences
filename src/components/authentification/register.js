@@ -17,6 +17,7 @@ function Registration() {
   const [lastName, setLastName] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // New state for loading status
 
   const videoRef = useRef(null);
   const [imageData, setImageData] = useState(null);
@@ -67,6 +68,7 @@ function Registration() {
 
   const handleRegistration = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // Start loading
 
     try {
       // convertire imagedata en htmlimageelement
@@ -103,6 +105,7 @@ function Registration() {
           isAdmin: false
         });
         console.log("Face descriptor saved for user:", userUid);
+        setIsLoading(false); // Stop loading on success
 
         alert('Registration Successful!');
         navigate('/');
@@ -110,6 +113,7 @@ function Registration() {
         console.log("No face detected!");
       }
     } catch (error) {
+      setIsLoading(false); // Stop loading on error
       console.error("Error during registration:", error);
     }
   };
@@ -159,7 +163,11 @@ function Registration() {
             <img src={imageData} alt="User" />
           </div>
         )}
-        <button type="submit">Register</button>
+          {isLoading ? (
+          <div className="spinner"></div> // Spinner component
+        ) : (
+          <button type="submit">Register</button>
+        )}
       </form>
     </div>
   );

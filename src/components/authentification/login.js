@@ -9,6 +9,7 @@ import { getDatabase, ref as dbRef, get } from 'firebase/database';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const navigate = useNavigate();
@@ -66,6 +67,7 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!imageData) {
       alert('Please take a picture before logging in.');
@@ -92,7 +94,10 @@ function Login() {
       }
 
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      setIsLoading(false); // Stop loading on success
       alert('Face recognized. Login Successful!');
+     
+
       navigate('/');
 
     } catch (error) {
@@ -129,7 +134,11 @@ function Login() {
             <img src={imageData} alt="User" />
           </div>
         )}
-        <button type="submit">Login</button>
+          {isLoading ? (
+          <div className="spinner"></div> // Spinner component
+        ) : (
+          <button type="submit">Login</button>
+        )}
         <button
             type="button"
             onClick={() => {

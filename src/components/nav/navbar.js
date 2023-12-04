@@ -70,10 +70,12 @@ function CustomNavbar({ user }) {
           <LinkContainer to="/">
             <Nav.Link>Home</Nav.Link>
           </LinkContainer>
-          <LinkContainer to="/sessions">
+          
+          {user && isAdmin && (
+            <>
+            <LinkContainer to="/sessions">
             <Nav.Link>Sessions</Nav.Link>
           </LinkContainer>
-          {user && isAdmin && (
             <NavDropdown title="Charts" id="basic-nav-dropdown">
               <LinkContainer to="/mood">
                 <NavDropdown.Item>Mood Heatmap</NavDropdown.Item>
@@ -85,6 +87,7 @@ function CustomNavbar({ user }) {
                 <NavDropdown.Item>Attendance Number</NavDropdown.Item>
               </LinkContainer>
             </NavDropdown>
+            </>
           )}
         </Nav>
         <Navbar.Collapse className="justify-content-end">
