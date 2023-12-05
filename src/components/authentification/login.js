@@ -135,7 +135,7 @@ function Login() {
           </div>
         )}
           {isLoading ? (
-          <div className="spinner"></div> // Spinner component
+          <div className="spinner"></div> 
         ) : (
           <button type="submit">Login</button>
         )}
