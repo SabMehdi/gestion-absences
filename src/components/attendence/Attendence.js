@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as faceapi from 'face-api.js';
 import { getDatabase, ref as dbRef, get, push, set } from 'firebase/database';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import "../../style/Attendence.css"
+import { auth } from '../firebase/firebase'; // Assuming this is the correct path
+
 function Attendence() {
   const location = useLocation();
   const sessionName = location.state?.sessionName;
@@ -12,7 +14,7 @@ function Attendence() {
   const [loadedModels, setLoadedModels] = useState(false);
   const [bestMatch, setBestMatches] = useState([null]); // State to store the best match
   const [isPersonIdentified, setIsPersonIdentified] = useState(false);
-
+  const navigate=useNavigate()
   useEffect(() => {
     const sessionTimeRef = dbRef(getDatabase(), `sessions/${sessionName}/time`);
     const currentTime = new Date().toISOString(); // Current time for the session
@@ -72,6 +74,45 @@ function Attendence() {
     }
   }
 
+  const verifyAdminFace = async () => {
+    if (!imageData) {
+      alert("Please take a picture before finishing registration.");
+      return false;
+    }
+
+    try {
+      const img = new Image();
+      img.src = imageData;
+      await new Promise((resolve) => img.onload = resolve);
+
+      const detection = await faceapi.detectSingleFace(img, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (!detection) {
+        alert("No face detected. Please try again.");
+        return false;
+      }
+
+      const userUid = auth.currentUser.uid; // Get the UID of the logged-in user
+      const database = getDatabase();
+      const userRef = dbRef(database, 'users/' + userUid);
+      const snapshot = await get(userRef);
+      if (snapshot.exists()) {
+        const userDescriptor = snapshot.val().faceDescriptor;
+        const distance = faceapi.euclideanDistance(detection.descriptor, userDescriptor);
+
+        return distance < 0.6; // Threshold for face match
+      } else {
+        alert("Admin data not available.");
+        return false;
+      }
+    } catch (error) {
+      console.error('Error during admin verification:', error);
+      alert('Error during admin verification: ' + error.message);
+      return false;
+    }
+  };
   const takePicture = async () => {
     try {
       const canvas = document.createElement('canvas');
@@ -80,11 +121,11 @@ function Attendence() {
       canvas.height = video.videoHeight;
       canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
       const dataURL = canvas.toDataURL('image/jpeg');
-  
+
       setImageData(dataURL);
       let image = new Image();
       image.src = dataURL;
-  
+
       await new Promise((resolve) => {
         image.onload = resolve;
       });
@@ -92,27 +133,27 @@ function Attendence() {
         .withFaceLandmarks()
         .withFaceDescriptors()
         .withFaceExpressions();
-  
+
       if (detections && detections.length > 0) {
         const storedDescriptors = await getAllFaceDescriptorsFromDatabase();
         const matches = [];
-  
+
         for (const detection of detections) {
           let bestMatch = { uid: null, distance: Infinity };
-  
+
           storedDescriptors.forEach(({ uid, descriptor: userDescriptor }) => {
             const distance = faceapi.euclideanDistance(detection.descriptor, userDescriptor);
             if (distance < bestMatch.distance) {
-              bestMatch = { uid, distance, mood: extractDominantMood(detection.expressions) , time: new Date().toISOString()};
+              bestMatch = { uid, distance, mood: extractDominantMood(detection.expressions), time: new Date().toISOString() };
             }
           });
-  
+
           if (bestMatch.distance < 0.6) {
             console.log(`Match found! User ID: ${bestMatch.uid}`);
             matches.push(bestMatch);
           }
         }
-  
+
         setBestMatches(matches); // Update this to handle an array of matches
         setIsPersonIdentified(true);
 
@@ -122,7 +163,7 @@ function Attendence() {
       alert('Error taking picture or detecting faces: ' + error.message)
     }
   };
-  
+
   function extractDominantMood(expressions) {
     return Object.entries(expressions)
       .reduce((max, current) => current[1] > max[1] ? current : max, ['', 0])[0];
@@ -162,55 +203,61 @@ function Attendence() {
     }
   }
   async function finishRegistration() {
+    const isAdminVerified = await verifyAdminFace();
+    if (!isAdminVerified) {
+      alert("Admin verification failed. Only the administrator can finish the registration.");
+      return;
+    }
     const database = getDatabase();
     const usersRef = dbRef(database, 'users/');
     const attendantsRef = dbRef(database, `sessions/${sessionName}/attendants`);
     const absentsRef = dbRef(database, `sessions/${sessionName}/absents`);
-  
+
     try {
       const usersSnapshot = await get(usersRef);
       const attendantsSnapshot = await get(attendantsRef);
-  
+
       const users = usersSnapshot.exists() ? usersSnapshot.val() : {};
       const attendants = attendantsSnapshot.exists() ? Object.values(attendantsSnapshot.val()).flat() : [];
-  
+
       // Filter out absent users
-      const absentUsers = Object.keys(users).filter(uid => 
+      const absentUsers = Object.keys(users).filter(uid =>
         !attendants.some(attendant => attendant.uid === uid))
         .map(uid => ({
           uid,
           time: new Date().toISOString()
         }));
-  
+
       if (absentUsers.length > 0) {
         await set(absentsRef, absentUsers);
       }
-  
+
       alert('Registration finished');
+      navigate('/sessions')
     } catch (error) {
       console.error('Error finishing registration:', error.message);
       alert('Error finishing registration: ' + error.message);
     }
   }
-  
+
 
   return (
     <div className="mood-analysis-container">
       <div className="icon-heading-container">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="50"
-        height="50"
-        viewBox="0 0 24 24"
-      >
-        <path d="M0 0h24v24H0z" fill="none" />
-        {/* Change the fill color as needed */}
-        <path
-          d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
-          fill="green"
-        />
-      </svg>
-    </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="50"
+          height="50"
+          viewBox="0 0 24 24"
+        >
+          <path d="M0 0h24v24H0z" fill="none" />
+          {/* Change the fill color as needed */}
+          <path
+            d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"
+            fill="green"
+          />
+        </svg>
+      </div>
       <h2>Attendance Check for session: {sessionName}</h2>
       <div className="content-container">
         {!loadedModels && (
@@ -254,7 +301,7 @@ function Attendence() {
         <button
           className="custom-btn"
           onClick={finishRegistration}
-        
+
         >
           Finish registration
         </button>
